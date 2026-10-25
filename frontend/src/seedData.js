@@ -1,4 +1,4 @@
-/**
+﻿/**
  * src/seedData.js
  * ข้อมูลเริ่มต้น (Shared Seed Data) สำหรับทั้ง Vite Frontend (GitHub Pages / Offline) และ SQLite Backend
  */
@@ -9,7 +9,7 @@ export const SEED_IS_TYPES = [
     name_en: 'Transaction Processing System',
     name_th: 'ระบบประมวลผลรายการประจำวัน',
     org_level: 'ระดับปฏิบัติการ (Operational Level)',
-    svg_path: './assets/svg/tps.svg',
+    svg_path: '../assets/images/tps.jpg',
     keywords: JSON.stringify(['รายการประจำวัน', 'Real-time / Batch', 'ข้อมูลโครงสร้างชัดเจน', 'ลดเวลาทำงานซ้ำ']),
     input_desc: 'ข้อมูลธุรกรรมรายวัน เช่น การขายสินค้า การฝาก-ถอนเงิน การลงทะเบียนเรียน',
     process_desc: 'การบันทึก จัดเรียง คำนวณ และปรับปรุงฐานข้อมูลพื้นฐานอย่างรวดเร็วและแม่นยำ',
@@ -21,7 +21,7 @@ export const SEED_IS_TYPES = [
     name_en: 'Office Automation System',
     name_th: 'ระบบสำนักงานอัตโนมัติ',
     org_level: 'ระดับปฏิบัติการและงานเอกสาร (Knowledge / Office Level)',
-    svg_path: './assets/svg/oas.svg',
+    svg_path: '../assets/images/oas.jpg',
     keywords: JSON.stringify(['งานเอกสารดิจิทัล', 'การสื่อสารในองค์กร', 'นัดหมาย/ประชุม', 'เพิ่มประสิทธิภาพสำนักงาน']),
     input_desc: 'เอกสาร ข้อความ ตารางนัดหมาย ข้อมูลการติดต่อสื่อสารระหว่างแผนก',
     process_desc: 'การจัดพิมพ์ ส่งต่อ ลงนามดิจิทัล จัดเก็บเอกสารออนไลน์ และประสานงานร่วมกัน',
@@ -33,7 +33,7 @@ export const SEED_IS_TYPES = [
     name_en: 'Management Information System',
     name_th: 'ระบบสารสนเทศเพื่อการจัดการ',
     org_level: 'ระดับบริหารกลาง (Management Level)',
-    svg_path: './assets/svg/mis.svg',
+    svg_path: '../assets/images/mis.jpg',
     keywords: JSON.stringify(['รายงานตามรอบเวลา', 'สรุปผลเปรียบเทียบแผน', 'ปัญหาที่มีโครงสร้างชัดเจน', 'ดึงข้อมูลจาก TPS']),
     input_desc: 'ข้อมูลสรุปรวมที่ผ่านการประมวลผลจากระบบ TPS',
     process_desc: 'การจัดกลุ่ม สรุปผล เปรียบเทียบยอดจริงกับแผนงาน (Scheduled & Exception Report)',
@@ -45,7 +45,7 @@ export const SEED_IS_TYPES = [
     name_en: 'Decision Support System',
     name_th: 'ระบบสนับสนุนการตัดสินใจ',
     org_level: 'ระดับบริหารกลางและนักวิเคราะห์ (Management / Analytical Level)',
-    svg_path: './assets/svg/dss.svg',
+    svg_path: '../assets/images/dss.jpg',
     keywords: JSON.stringify(['ปัญหากึ่งมีโครงสร้าง', 'จำลองสถานการณ์ (What-if)', 'วิเคราะห์ทางเลือก', 'ยืดหยุ่นสูง']),
     input_desc: 'ข้อมูลจากทั้งภายใน (TPS/MIS) และข้อมูลภายนอกองค์กร + ตัวแบบคณิตศาสตร์/สถิติ',
     process_desc: 'การวิเคราะห์เชิงโต้ตอบ การจำลองสถานการณ์ (What-if Analysis, Sensitivity Analysis)',
@@ -57,7 +57,7 @@ export const SEED_IS_TYPES = [
     name_en: 'Executive Information System (ESS)',
     name_th: 'ระบบสารสนเทศสำหรับผู้บริหารระดับสูง',
     org_level: 'ระดับกลยุทธ์ (Strategic Level)',
-    svg_path: './assets/svg/eis.svg',
+    svg_path: '../assets/images/eis.jpg',
     keywords: JSON.stringify(['วิสัยทัศน์ระยะยาว 3-5 ปี', 'ปัญหาไม่มีโครงสร้าง', 'Dashboard / Drill-down', 'ข้อมูลคู่แข่ง/ตลาด']),
     input_desc: 'ข้อมูลสรุปภาพรวมทั้งองค์กร + ข้อมูลเศรษฐกิจ คู่แข่ง และแนวโน้มอุตสาหกรรมภายนอก',
     process_desc: 'การแสดงผลกราฟิกเชิงกลยุทธ์ การเจาะลึกข้อมูล (Drill-down) และติดตาม KPI ระดับองค์กร',
@@ -69,7 +69,7 @@ export const SEED_IS_TYPES = [
     name_en: 'Expert System & AI',
     name_th: 'ระบบผู้เชี่ยวชาญและปัญญาประดิษฐ์',
     org_level: 'ระบบฐานความรู้เฉพาะทาง (Knowledge / Specialized Level)',
-    svg_path: './assets/svg/es.svg',
+    svg_path: '../assets/images/es.jpg',
     keywords: JSON.stringify(['ฐานความรู้ (Knowledge Base)', 'กลไกอนุมาน (Inference Engine)', 'เลียนแบบผู้เชี่ยวชาญ', 'วินิจฉัยเฉพาะทาง']),
     input_desc: 'อาการ/ข้อมูลปัญหาเฉพาะทาง + กฎเกณฑ์ความรู้จากผู้เชี่ยวชาญมนุษย์',
     process_desc: 'การอนุมานด้วยกฎ (Rule-based Inference) หรือโมเดลปัญญาประดิษฐ์เพื่อหาข้อสรุป',
@@ -355,3 +355,4 @@ export const SEED_QUESTIONS = [
     explanation: 'OAS (Office Automation System) ช่วยลดขั้นตอนงานเอกสารและการประสานงานในสำนักงาน'
   }
 ];
+

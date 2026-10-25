@@ -1,4 +1,4 @@
-import sqlite3
+﻿import sqlite3
 import json
 import os
 
@@ -70,37 +70,37 @@ CREATE TABLE IF NOT EXISTS game_sessions (
 """)
 
 is_types = [
-  ("TPS", "Transaction Processing System", "ระบบประมวลผลรายการประจำวัน", "ระดับปฏิบัติการ (Operational Level)", "/assets/svg/tps.svg",
+  ("TPS", "Transaction Processing System", "ระบบประมวลผลรายการประจำวัน", "ระดับปฏิบัติการ (Operational Level)", "./assets/images/tps.jpg",
    json.dumps(["รายการประจำวัน", "Real-time / Batch", "ข้อมูลโครงสร้างชัดเจน", "ลดเวลาทำงานซ้ำ"], ensure_ascii=False),
    "ข้อมูลธุรกรรมรายวัน เช่น การขายสินค้า การฝาก-ถอนเงิน การลงทะเบียนเรียน",
    "การบันทึก จัดเรียง คำนวณ และปรับปรุงฐานข้อมูลพื้นฐานอย่างรวดเร็วและแม่นยำ",
    "ใบเสร็จรับเงิน รายการบันทึกธุรกรรม รายงานสรุปยอดประจำวัน",
    "ระบบ POS คิดเงินที่แคชเชียร์ร้านค้าปลีก, ระบบตู้ ATM, ระบบเช็กอินที่นั่งสายการบิน"),
-  ("OAS", "Office Automation System", "ระบบสำนักงานอัตโนมัติ", "ระดับปฏิบัติการและงานเอกสาร (Knowledge / Office Level)", "/assets/svg/oas.svg",
+  ("OAS", "Office Automation System", "ระบบสำนักงานอัตโนมัติ", "ระดับปฏิบัติการและงานเอกสาร (Knowledge / Office Level)", "./assets/images/oas.jpg",
    json.dumps(["งานเอกสารดิจิทัล", "การสื่อสารในองค์กร", "นัดหมาย/ประชุม", "เพิ่มประสิทธิภาพสำนักงาน"], ensure_ascii=False),
    "เอกสาร ข้อความ ตารางนัดหมาย ข้อมูลการติดต่อสื่อสารระหว่างแผนก",
    "การจัดพิมพ์ ส่งต่อ ลงนามดิจิทัล จัดเก็บเอกสารออนไลน์ และประสานงานร่วมกัน",
    "หนังสือราชการอิเล็กทรอนิกส์ (e-Document), ตารางนัดหมาย, อีเมล, การประชุมทางไกล",
    "ระบบสารบรรณอิเล็กทรอนิกส์ (e-Office), Microsoft 365 / Google Workspace ในองค์กร"),
-  ("MIS", "Management Information System", "ระบบสารสนเทศเพื่อการจัดการ", "ระดับบริหารกลาง (Management Level)", "/assets/svg/mis.svg",
+  ("MIS", "Management Information System", "ระบบสารสนเทศเพื่อการจัดการ", "ระดับบริหารกลาง (Management Level)", "./assets/images/mis.jpg",
    json.dumps(["รายงานตามรอบเวลา", "สรุปผลเปรียบเทียบแผน", "ปัญหาที่มีโครงสร้างชัดเจน", "ดึงข้อมูลจาก TPS"], ensure_ascii=False),
    "ข้อมูลสรุปรวมที่ผ่านการประมวลผลจากระบบ TPS",
    "การจัดกลุ่ม สรุปผล เปรียบเทียบยอดจริงกับแผนงาน (Scheduled & Exception Report)",
    "รายงานสรุปยอดขายรายเดือน/ไตรมาส, รายงานสิ่งผิดปกติ (Exception Report)",
    "ระบบรายงานสรุปยอดขายรายเดือนของผู้จัดการสาขา, ระบบติดตามงบประมาณก่อสร้างรายไตรมาส"),
-  ("DSS", "Decision Support System", "ระบบสนับสนุนการตัดสินใจ", "ระดับบริหารกลางและนักวิเคราะห์ (Management / Analytical Level)", "/assets/svg/dss.svg",
+  ("DSS", "Decision Support System", "ระบบสนับสนุนการตัดสินใจ", "ระดับบริหารกลางและนักวิเคราะห์ (Management / Analytical Level)", "./assets/images/dss.jpg",
    json.dumps(["ปัญหากึ่งมีโครงสร้าง", "จำลองสถานการณ์ (What-if)", "วิเคราะห์ทางเลือก", "ยืดหยุ่นสูง"], ensure_ascii=False),
    "ข้อมูลจากทั้งภายใน (TPS/MIS) และข้อมูลภายนอกองค์กร + ตัวแบบคณิตศาสตร์/สถิติ",
    "การวิเคราะห์เชิงโต้ตอบ การจำลองสถานการณ์ (What-if Analysis, Sensitivity Analysis)",
    "ทางเลือกในการตัดสินใจ พยากรณ์ผลลัพธ์หากปรับเปลี่ยนตัวแปรธุรกิจ",
    "ระบบจำลองการปรับราคาน้ำมันต่อต้นทุนขนส่ง, ระบบวิเคราะห์พอร์ตการลงทุนและจำลองความเสี่ยง"),
-  ("EIS", "Executive Information System (ESS)", "ระบบสารสนเทศสำหรับผู้บริหารระดับสูง", "ระดับกลยุทธ์ (Strategic Level)", "/assets/svg/eis.svg",
+  ("EIS", "Executive Information System (ESS)", "ระบบสารสนเทศสำหรับผู้บริหารระดับสูง", "ระดับกลยุทธ์ (Strategic Level)", "./assets/images/eis.jpg",
    json.dumps(["วิสัยทัศน์ระยะยาว 3-5 ปี", "ปัญหาไม่มีโครงสร้าง", "Dashboard / Drill-down", "ข้อมูลคู่แข่ง/ตลาด"], ensure_ascii=False),
    "ข้อมูลสรุปภาพรวมทั้งองค์กร + ข้อมูลเศรษฐกิจ คู่แข่ง และแนวโน้มอุตสาหกรรมภายนอก",
    "การแสดงผลกราฟิกเชิงกลยุทธ์ การเจาะลึกข้อมูล (Drill-down) และติดตาม KPI ระดับองค์กร",
    "Executive Dashboard แสดงดัชนีชี้วัดความสำเร็จ (KPI) และแนวโน้มเชิงกลยุทธ์",
    "ระบบ Strategic Dashboard ของอธิการบดีหรือ CEO สำหรับวางแผนทิศทางองค์กร 5 ปี"),
-  ("ES", "Expert System & AI", "ระบบผู้เชี่ยวชาญและปัญญาประดิษฐ์", "ระบบฐานความรู้เฉพาะทาง (Knowledge / Specialized Level)", "/assets/svg/es.svg",
+  ("ES", "Expert System & AI", "ระบบผู้เชี่ยวชาญและปัญญาประดิษฐ์", "ระบบฐานความรู้เฉพาะทาง (Knowledge / Specialized Level)", "./assets/images/es.jpg",
    json.dumps(["ฐานความรู้ (Knowledge Base)", "กลไกอนุมาน (Inference Engine)", "เลียนแบบผู้เชี่ยวชาญ", "วินิจฉัยเฉพาะทาง"], ensure_ascii=False),
    "อาการ/ข้อมูลปัญหาเฉพาะทาง + กฎเกณฑ์ความรู้จากผู้เชี่ยวชาญมนุษย์",
    "การอนุมานด้วยกฎ (Rule-based Inference) หรือโมเดลปัญญาประดิษฐ์เพื่อหาข้อสรุป",
@@ -140,4 +140,5 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
 conn.commit()
 conn.close()
 print("SQLite DB initialized successfully!")
+
 
