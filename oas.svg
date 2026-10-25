@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 220" width="100%" height="100%">
+  <defs>
+    <linearGradient id="oasBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c4a6e"/>
+      <stop offset="100%" stop-color="#082f49"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="360" height="220" rx="16" fill="url(#oasBg)" stroke="#0ea5e9" stroke-width="2"/>
+
+  <!-- Digital Document / e-Office Card -->
+  <g transform="translate(36, 36)">
+    <rect width="96" height="122" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+    <rect x="14" y="18" width="44" height="8" rx="4" fill="#38bdf8"/>
+    <rect x="14" y="34" width="68" height="6" rx="3" fill="#bae6fd" opacity="0.8"/>
+    <rect x="14" y="46" width="68" height="6" rx="3" fill="#bae6fd" opacity="0.8"/>
+    <rect x="14" y="58" width="52" height="6" rx="3" fill="#bae6fd" opacity="0.8"/>
+    <!-- e-Signature Seal -->
+    <circle cx="66" cy="92" r="16" fill="#0284c7" stroke="#7dd3fc" stroke-width="1.5"/>
+    <path d="M59,92 L64,97 L74,86" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- Cloud Sync & Workflow Nodes -->
+  <path d="M142,96 L192,96" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="4,4"/>
+  <polygon points="192,91 202,96 192,101" fill="#38bdf8"/>
+
+  <!-- Calendar & Mail Hub -->
+  <g transform="translate(210, 38)">
+    <!-- Calendar Widget -->
+    <rect width="114" height="64" rx="10" fill="#0f172a" stroke="#7dd3fc" stroke-width="1.8"/>
+    <rect width="114" height="20" rx="8" fill="#0284c7"/>
+    <text x="57" y="14" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="10" font-weight="bold">e-Meeting &amp; Schedule</text>
+    <circle cx="28" cy="42" r="7" fill="#38bdf8"/>
+    <circle cx="57" cy="42" r="7" fill="#0369a1"/>
+    <circle cx="86" cy="42" r="7" fill="#38bdf8"/>
+
+    <!-- Mail / Collaboration Card -->
+    <rect y="74" width="114" height="48" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="1.8"/>
+    <polyline points="12,84 57,106 102,84" fill="none" stroke="#7dd3fc" stroke-width="2"/>
+  </g>
+
+  <rect x="16" y="186" width="328" height="24" rx="6" fill="#082f49" opacity="0.85"/>
+  <text x="180" y="202" text-anchor="middle" fill="#bae6fd" font-family="sans-serif" font-size="12" font-weight="bold">
+    OAS • ระบบสำนักงานอัตโนมัติ (Office &amp; Collaboration)
+  </text>
+</svg>

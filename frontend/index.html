@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
@@ -40,16 +40,35 @@
       </div>
     </header>
 
-    <!-- Student Profile & SQLite Login Bar -->
+    <!-- Student Profile & Cloud / SQLite Connection Bar -->
     <div class="student-bar">
       <div class="student-inputs">
         <span style="font-size: 13px; font-weight: 700; color: #a5b4fc;">👨‍🎓 ข้อมูลผู้เล่น (ชั้นปีที่ 2):</span>
-        <input type="text" id="inp-student-id" placeholder="รหัสนักศึกษา เช่น 67010299" value="67010299" style="width: 170px;" />
-        <input type="text" id="inp-student-name" placeholder="ชื่อ-นามสกุล นักศึกษา" value="นักศึกษาชั้นปีที่ 2 (ทดสอบระบบ)" style="width: 230px;" />
-        <button id="btn-login-student" class="btn btn-primary">ลงชื่อเข้าใช้ (SQLite)</button>
+        <input type="text" id="inp-student-id" placeholder="รหัสนักศึกษา เช่น 67010299" value="67010299" style="width: 165px;" />
+        <input type="text" id="inp-student-name" placeholder="ชื่อ-นามสกุล นักศึกษา" value="นักศึกษาชั้นปีที่ 2 (ทดสอบระบบ)" style="width: 220px;" />
+        <button id="btn-login-student" class="btn btn-primary">ลงชื่อเข้าใช้</button>
+        <button id="btn-toggle-supabase" class="btn" style="border-color: #10b981; color: #6ee7b7;">☁️ ตั้งค่า Supabase Cloud</button>
       </div>
       <div id="student-login-msg" style="font-size: 12px; color: #6ee7b7;">
-        พร้อมบันทึกผลการเรียนรู้ลงฐานข้อมูล SQLite
+        รองรับทั้ง Vercel + Supabase (WebApp) และ Electron + SQLite (Desktop)
+      </div>
+    </div>
+
+    <!-- Supabase Quick Config Panel (Toggleable) -->
+    <div id="supabase-config-panel" class="card hidden" style="border-color: #10b981; background: #062c24;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div>
+          <h3 style="font-size: 15px; color: #6ee7b7;">☁️ ตั้งค่าการเชื่อมต่อฐานข้อมูล Supabase (สำหรับ WebApp บน Vercel หรือทดสอบออนไลน์)</h3>
+          <p style="font-size: 12px; color: #a7f3d0;">สามารถตั้งค่าผ่าน Environment Variables บน Vercel (<code>VITE_SUPABASE_URL</code> และ <code>VITE_SUPABASE_ANON_KEY</code>) หรือวางค่าที่นี่เพื่อเชื่อมต่อทันที:</p>
+        </div>
+      </div>
+      <div class="grid-2" style="margin-top: 10px;">
+        <input type="text" id="inp-sb-url" placeholder="Supabase Project URL (เช่น https://xxxx.supabase.co)" style="width: 100%;" />
+        <input type="password" id="inp-sb-key" placeholder="Supabase Anon Public Key (eyJhbGci...)" style="width: 100%;" />
+      </div>
+      <div style="display: flex; gap: 10px; margin-top: 10px;">
+        <button id="btn-save-supabase" class="btn btn-emerald">🔗 บันทึกและเชื่อมต่อ Supabase ทันที</button>
+        <button id="btn-clear-supabase" class="btn">สลับกลับโหมด SQLite / Local</button>
       </div>
     </div>
 

@@ -9,7 +9,9 @@ import {
   fetchLeaderboard,
   loginStudentApi,
   saveSessionApi,
-  createQuestionApi
+  createQuestionApi,
+  getSupabaseConfig,
+  setSupabaseConfig
 } from './api.js';
 import {
   SEED_IS_TYPES,
@@ -136,14 +138,23 @@ async function initApp() {
   state.matrixQuestions = allQuestions.filter(q => q.stage === 'speed_matrix');
 
   const dbBadge = document.getElementById('db-status-badge');
-  if (state.online) {
-    dbBadge.textContent = `🗄️ SQLite Connected (${state.engine})`;
+  state.leaderboard = await fetchLeaderboard();
+  if (data.mode === 'supabase') {
+    dbBadge.textContent = `☁️ Supabase Cloud Connected`;
     dbBadge.className = 'badge emerald';
-    state.leaderboard = await fetchLeaderboard();
+  } else if (data.mode === 'sqlite') {
+    dbBadge.textContent = `🗄️ SQLite Desktop Connected (${state.engine})`;
+    dbBadge.className = 'badge emerald';
   } else {
-    dbBadge.textContent = '⚠️ Offline Seed Mode';
+    dbBadge.textContent = '💾 Web Standalone Mode (พร้อมเชื่อม Supabase)';
     dbBadge.className = 'badge amber';
   }
+
+  const sbCfg = getSupabaseConfig();
+  const sbUrlInp = document.getElementById('inp-sb-url');
+  const sbKeyInp = document.getElementById('inp-sb-key');
+  if (sbUrlInp && sbCfg.url) sbUrlInp.value = sbCfg.url;
+  if (sbKeyInp && sbCfg.key) sbKeyInp.value = sbCfg.key;
 
   bindEvents();
   renderHub();
@@ -161,6 +172,31 @@ function bindEvents() {
       switchTab(tab);
     });
   });
+
+  const btnToggleSb = document.getElementById('btn-toggle-supabase');
+  if (btnToggleSb) {
+    btnToggleSb.addEventListener('click', () => {
+      document.getElementById('supabase-config-panel').classList.toggle('hidden');
+    });
+  }
+
+  const btnSaveSb = document.getElementById('btn-save-supabase');
+  if (btnSaveSb) {
+    btnSaveSb.addEventListener('click', async () => {
+      const url = document.getElementById('inp-sb-url').value.trim();
+      const key = document.getElementById('inp-sb-key').value.trim();
+      setSupabaseConfig(url, key);
+      window.location.reload();
+    });
+  }
+
+  const btnClearSb = document.getElementById('btn-clear-supabase');
+  if (btnClearSb) {
+    btnClearSb.addEventListener('click', () => {
+      setSupabaseConfig('', '');
+      window.location.reload();
+    });
+  }
 
   // Arcade Controls
   document.getElementById('btn-arc-sound').addEventListener('click', e => {

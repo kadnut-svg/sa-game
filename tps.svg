@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 220" width="100%" height="100%">
+  <defs>
+    <linearGradient id="tpsBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#064e3b"/>
+      <stop offset="100%" stop-color="#022c22"/>
+    </linearGradient>
+    <linearGradient id="tpsAccent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#34d399"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="360" height="220" rx="16" fill="url(#tpsBg)" stroke="#10b981" stroke-width="2"/>
+
+  <!-- POS Terminal / Register Monitor -->
+  <rect x="36" y="42" width="130" height="92" rx="10" fill="#0f172a" stroke="#34d399" stroke-width="2"/>
+  <rect x="46" y="52" width="110" height="62" rx="6" fill="#065f46"/>
+  <!-- Screen Barcode & Price Lines -->
+  <rect x="54" y="60" width="52" height="8" rx="3" fill="#6ee7b7"/>
+  <rect x="54" y="74" width="76" height="6" rx="3" fill="#a7f3d0" opacity="0.8"/>
+  <rect x="54" y="86" width="60" height="6" rx="3" fill="#a7f3d0" opacity="0.8"/>
+  <text x="148" y="106" text-anchor="end" fill="#ffffff" font-family="monospace" font-size="14" font-weight="bold">฿ 1,250</text>
+
+  <!-- Stand & Cash Drawer -->
+  <rect x="86" y="134" width="30" height="16" fill="#10b981"/>
+  <rect x="26" y="150" width="150" height="28" rx="6" fill="#047857" stroke="#6ee7b7" stroke-width="1.5"/>
+  <circle cx="101" cy="164" r="5" fill="#a7f3d0"/>
+
+  <!-- Real-time Arrow Flow -->
+  <path d="M180,95 L222,95" stroke="#34d399" stroke-width="3" stroke-dasharray="5,4"/>
+  <polygon points="222,89 234,95 222,101" fill="#34d399"/>
+  <text x="206" y="83" text-anchor="middle" fill="#6ee7b7" font-family="sans-serif" font-size="10" font-weight="bold">REAL-TIME</text>
+
+  <!-- Database Cylinder (Operational DB) -->
+  <g transform="translate(242, 46)">
+    <ellipse cx="44" cy="16" rx="42" ry="12" fill="url(#tpsAccent)"/>
+    <path d="M2,16 L2,98 A42,12 0 0,0 86,98 L86,16" fill="#059669" stroke="#6ee7b7" stroke-width="1.5"/>
+    <ellipse cx="44" cy="16" rx="42" ry="12" fill="#34d399" stroke="#a7f3d0" stroke-width="1.5"/>
+    <path d="M2,44 A42,12 0 0,0 86,44" fill="none" stroke="#a7f3d0" stroke-width="1.2"/>
+    <path d="M2,72 A42,12 0 0,0 86,72" fill="none" stroke="#a7f3d0" stroke-width="1.2"/>
+    <text x="44" y="64" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="13" font-weight="bold">TPS DB</text>
+  </g>
+
+  <!-- Label Footer -->
+  <rect x="16" y="186" width="328" height="24" rx="6" fill="#022c22" opacity="0.8"/>
+  <text x="180" y="202" text-anchor="middle" fill="#a7f3d0" font-family="sans-serif" font-size="12" font-weight="bold">
+    TPS • ระบบประมวลผลรายการประจำวัน (Operational)
+  </text>
+</svg>
