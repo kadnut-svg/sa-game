@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 220" width="100%" height="100%">
+  <defs>
+    <linearGradient id="esBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#581c87"/>
+      <stop offset="100%" stop-color="#3b0764"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="360" height="220" rx="16" fill="url(#esBg)" stroke="#a855f7" stroke-width="2"/>
+
+  <!-- Left: Knowledge Base -->
+  <g transform="translate(28, 42)">
+    <rect width="102" height="120" rx="10" fill="#0f172a" stroke="#c084fc" stroke-width="1.8"/>
+    <text x="51" y="22" text-anchor="middle" fill="#e9d5ff" font-family="sans-serif" font-size="10" font-weight="bold">Knowledge Base</text>
+    <rect x="14" y="34" width="74" height="16" rx="4" fill="#6b21a8"/>
+    <text x="51" y="45" text-anchor="middle" fill="#ffffff" font-family="monospace" font-size="9">IF A &amp; B THEN C</text>
+    <rect x="14" y="58" width="74" height="16" rx="4" fill="#6b21a8"/>
+    <text x="51" y="69" text-anchor="middle" fill="#ffffff" font-family="monospace" font-size="9">RULE #104: HIGH</text>
+    <rect x="14" y="82" width="74" height="16" rx="4" fill="#6b21a8"/>
+    <text x="51" y="93" text-anchor="middle" fill="#ffffff" font-family="monospace" font-size="9">EXPERT DOMAIN</text>
+  </g>
+
+  <!-- Center: Inference Engine Neural Core -->
+  <g transform="translate(184, 102)">
+    <circle r="38" fill="#0f172a" stroke="#d8b4fe" stroke-width="2.5"/>
+    <circle r="26" fill="#7e22ce" opacity="0.4"/>
+    <!-- Neural Network Nodes -->
+    <line x1="-14" y1="-12" x2="14" y2="12" stroke="#e9d5ff" stroke-width="1.8"/>
+    <line x1="-14" y1="12" x2="14" y2="-12" stroke="#e9d5ff" stroke-width="1.8"/>
+    <line x1="-18" y1="0" x2="18" y2="0" stroke="#e9d5ff" stroke-width="1.8"/>
+    <circle cx="-14" cy="-12" r="5" fill="#c084fc"/>
+    <circle cx="14" cy="-12" r="5" fill="#38bdf8"/>
+    <circle cx="-14" cy="12" r="5" fill="#34d399"/>
+    <circle cx="14" cy="12" r="5" fill="#f43f5e"/>
+    <circle cx="0" cy="0" r="7" fill="#ffffff"/>
+    <text x="0" y="52" text-anchor="middle" fill="#e9d5ff" font-family="sans-serif" font-size="10" font-weight="bold">Inference Engine</text>
+  </g>
+
+  <!-- Right: Expert Diagnosis Output -->
+  <g transform="translate(244, 52)">
+    <rect width="92" height="96" rx="10" fill="#0f172a" stroke="#34d399" stroke-width="1.8"/>
+    <circle cx="46" cy="34" r="16" fill="#059669"/>
+    <path d="M39,34 L44,39 L55,28" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <text x="46" y="68" text-anchor="middle" fill="#a7f3d0" font-family="sans-serif" font-size="10" font-weight="bold">คำวินิจฉัย</text>
+    <text x="46" y="82" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="9">แม่นยำ 98.5%</text>
+  </g>
+
+  <rect x="16" y="186" width="328" height="24" rx="6" fill="#3b0764" opacity="0.9"/>
+  <text x="180" y="202" text-anchor="middle" fill="#e9d5ff" font-family="sans-serif" font-size="12" font-weight="bold">
+    ES / AI • ระบบผู้เชี่ยวชาญและปัญญาประดิษฐ์ (Knowledge &amp; Inference)
+  </text>
+</svg>

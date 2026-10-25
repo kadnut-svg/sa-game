@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="tier1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f43f5e"/>
+      <stop offset="100%" stop-color="#e11d48"/>
+    </linearGradient>
+    <linearGradient id="tier2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="tier3" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#4f46e5"/>
+    </linearGradient>
+    <linearGradient id="tier4" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <linearGradient id="tier5" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="pillarEs" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#7e22ce"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background Card -->
+  <rect width="640" height="420" rx="20" fill="url(#bgGrad)" stroke="#334155" stroke-width="2"/>
+
+  <!-- Subtle Grid Lines -->
+  <g stroke="#334155" stroke-width="0.6" opacity="0.4">
+    <line x1="40" y1="80" x2="600" y2="80"/>
+    <line x1="40" y1="150" x2="600" y2="150"/>
+    <line x1="40" y1="220" x2="600" y2="220"/>
+    <line x1="40" y1="290" x2="600" y2="290"/>
+    <line x1="40" y1="360" x2="600" y2="360"/>
+  </g>
+
+  <!-- Title -->
+  <text x="300" y="36" text-anchor="middle" fill="#f8fafc" font-family="sans-serif" font-size="16" font-weight="bold">
+    พีระมิดระบบสารสนเทศตามระดับการบริหารองค์กร (IS Pyramid)
+  </text>
+
+  <!-- Tier 1: EIS (Top Apex) -->
+  <polygon points="280,55 340,120 220,120" fill="url(#tier1)" stroke="#fda4af" stroke-width="1.5"/>
+  <text x="280" y="102" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="14" font-weight="bold">EIS / ESS</text>
+  <text x="115" y="95" text-anchor="end" fill="#fda4af" font-family="sans-serif" font-size="12" font-weight="bold">ระดับกลยุทธ์ (Strategic)</text>
+
+  <!-- Tier 2: DSS -->
+  <polygon points="215,126 345,126 390,185 170,185" fill="url(#tier2)" stroke="#fde68a" stroke-width="1.5"/>
+  <text x="280" y="155" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="15" font-weight="bold">DSS</text>
+  <text x="280" y="173" text-anchor="middle" fill="#fef3c7" font-family="sans-serif" font-size="11">สนับสนุนการตัดสินใจ (What-if)</text>
+  <text x="115" y="160" text-anchor="end" fill="#fcd34d" font-family="sans-serif" font-size="12" font-weight="bold">ระดับบริหารวิเคราะห์</text>
+
+  <!-- Tier 3: MIS -->
+  <polygon points="165,191 395,191 440,250 120,250" fill="url(#tier3)" stroke="#c7d2fe" stroke-width="1.5"/>
+  <text x="280" y="220" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="15" font-weight="bold">MIS</text>
+  <text x="280" y="238" text-anchor="middle" fill="#e0e7ff" font-family="sans-serif" font-size="11">สารสนเทศเพื่อการจัดการ (รายงานประจำงวด)</text>
+  <text x="105" y="225" text-anchor="end" fill="#a5b4fc" font-family="sans-serif" font-size="12" font-weight="bold">ระดับบริหารกลาง</text>
+
+  <!-- Tier 4: OAS / KWS -->
+  <polygon points="115,256 445,256 490,315 70,315" fill="url(#tier4)" stroke="#bae6fd" stroke-width="1.5"/>
+  <text x="280" y="285" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="15" font-weight="bold">OAS / KWS</text>
+  <text x="280" y="303" text-anchor="middle" fill="#e0f2fe" font-family="sans-serif" font-size="11">ระบบสำนักงานอัตโนมัติและงานเอกสาร</text>
+
+  <!-- Tier 5: TPS (Base) -->
+  <polygon points="65,321 495,321 540,385 20,385" fill="url(#tier5)" stroke="#a7f3d0" stroke-width="1.5"/>
+  <text x="280" y="352" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="16" font-weight="bold">TPS (Transaction Processing System)</text>
+  <text x="280" y="372" text-anchor="middle" fill="#d1fae5" font-family="sans-serif" font-size="12">ระดับปฏิบัติการ (Operational Level) — บันทึกรายการประจำวัน</text>
+
+  <!-- Side Pillar: ES / AI Cross-Level Support -->
+  <rect x="555" y="75" width="62" height="310" rx="12" fill="url(#pillarEs)" stroke="#e9d5ff" stroke-width="1.5"/>
+  <text x="586" y="195" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="14" font-weight="bold" transform="rotate(-90 586 195)">
+    ES / AI (ระบบผู้เชี่ยวชาญ)
+  </text>
+  <circle cx="586" cy="100" r="12" fill="#f3e8ff" opacity="0.25"/>
+  <path d="M580,100 L585,105 L593,95" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+</svg>

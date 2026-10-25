@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 220" width="100%" height="100%">
+  <defs>
+    <linearGradient id="misBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#312e81"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="360" height="220" rx="16" fill="url(#misBg)" stroke="#6366f1" stroke-width="2"/>
+
+  <!-- Monthly Scheduled Report Screen -->
+  <rect x="30" y="28" width="300" height="146" rx="12" fill="#0f172a" stroke="#818cf8" stroke-width="2"/>
+  <rect x="30" y="28" width="300" height="26" rx="10" fill="#4f46e5"/>
+  <circle cx="48" cy="41" r="4" fill="#c7d2fe"/>
+  <circle cx="62" cy="41" r="4" fill="#c7d2fe"/>
+  <text x="180" y="45" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="11" font-weight="bold">
+    MONTHLY MANAGEMENT REPORT (Plan vs Actual)
+  </text>
+
+  <!-- Bar Chart Comparison -->
+  <g transform="translate(52, 72)">
+    <line x1="0" y1="84" x2="145" y2="84" stroke="#6366f1" stroke-width="1.5"/>
+    <!-- Q1 -->
+    <rect x="12" y="38" width="16" height="46" rx="3" fill="#6366f1"/>
+    <rect x="30" y="26" width="16" height="58" rx="3" fill="#a5b4fc"/>
+    <!-- Q2 -->
+    <rect x="60" y="22" width="16" height="62" rx="3" fill="#6366f1"/>
+    <rect x="78" y="14" width="16" height="70" rx="3" fill="#a5b4fc"/>
+    <!-- Q3 Exception -->
+    <rect x="108" y="30" width="16" height="54" rx="3" fill="#6366f1"/>
+    <rect x="126" y="52" width="16" height="32" rx="3" fill="#f43f5e"/>
+  </g>
+
+  <!-- Exception Report Alert Box -->
+  <g transform="translate(212, 68)">
+    <rect width="102" height="88" rx="8" fill="#1e1b4b" stroke="#818cf8" stroke-width="1.5"/>
+    <text x="51" y="20" text-anchor="middle" fill="#c7d2fe" font-family="sans-serif" font-size="10" font-weight="bold">Exception Alert</text>
+    <rect x="12" y="30" width="78" height="10" rx="3" fill="#f43f5e" opacity="0.85"/>
+    <rect x="12" y="48" width="64" height="8" rx="3" fill="#818cf8" opacity="0.6"/>
+    <rect x="12" y="64" width="72" height="8" rx="3" fill="#818cf8" opacity="0.6"/>
+  </g>
+
+  <rect x="16" y="186" width="328" height="24" rx="6" fill="#1e1b4b" opacity="0.9"/>
+  <text x="180" y="202" text-anchor="middle" fill="#c7d2fe" font-family="sans-serif" font-size="12" font-weight="bold">
+    MIS • ระบบสารสนเทศเพื่อการจัดการ (Scheduled &amp; Exception)
+  </text>
+</svg>
