@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IS Cyber Quest — เกม 2D Vector SVG จำแนกประเภทของระบบสารสนเทศ (Vite + Node.js + SQLite + Electron)</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div class="app-shell">
+
+    <!-- Top Header -->
+    <header class="card header-bar">
+      <div class="brand-group">
+        <img src="./assets/svg/badge-cio.svg" alt="IS Architect Badge" class="brand-logo" />
+        <div>
+          <h1 style="font-size: 20px; font-weight: 800;">🎮 IS Cyber Quest: เกมจำแนกประเภทของระบบสารสนเทศ</h1>
+          <div class="badge-row">
+            <span class="badge indigo">ระดับอุดมศึกษา ชั้นปีที่ 2</span>
+            <span class="badge emerald">หลักสูตรแกนกลางฯ 2560 (ว 4.1 &amp; ว 4.2)</span>
+            <span id="db-status-badge" class="badge amber">กำลังตรวจสอบ SQLite Backend...</span>
+            <span id="desktop-status-badge" class="badge rose">Web / Vite Mode</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-box">
+        <div class="stat-item">
+          <div class="stat-label">คะแนนรวม</div>
+          <div id="hdr-score" class="stat-val" style="color: #fbbf24;">0</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Combo</div>
+          <div id="hdr-streak" class="stat-val" style="color: #34d399;">x0</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">ความก้าวหน้า</div>
+          <div id="hdr-progress" class="stat-val">0/20</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Student Profile & SQLite Login Bar -->
+    <div class="student-bar">
+      <div class="student-inputs">
+        <span style="font-size: 13px; font-weight: 700; color: #a5b4fc;">👨‍🎓 ข้อมูลผู้เล่น (ชั้นปีที่ 2):</span>
+        <input type="text" id="inp-student-id" placeholder="รหัสนักศึกษา เช่น 67010299" value="67010299" style="width: 170px;" />
+        <input type="text" id="inp-student-name" placeholder="ชื่อ-นามสกุล นักศึกษา" value="นักศึกษาชั้นปีที่ 2 (ทดสอบระบบ)" style="width: 230px;" />
+        <button id="btn-login-student" class="btn btn-primary">ลงชื่อเข้าใช้ (SQLite)</button>
+      </div>
+      <div id="student-login-msg" style="font-size: 12px; color: #6ee7b7;">
+        พร้อมบันทึกผลการเรียนรู้ลงฐานข้อมูล SQLite
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+      <button class="tab-btn active" data-tab="arcade">🕹️ 1. โหมดเกม 2D Arcade</button>
+      <button class="tab-btn" data-tab="hub">🎨 2. คลังความรู้ &amp; ภาพ Vector SVG</button>
+      <button class="tab-btn" data-tab="stage1">🏰 3. ด่านพีระมิดองค์กร</button>
+      <button class="tab-btn" data-tab="stage2">💼 4. ด่านกรณีศึกษา (10 ข้อ)</button>
+      <button class="tab-btn" data-tab="stage3">⚡ 5. ด่าน Speed Matrix</button>
+      <button class="tab-btn" data-tab="report">🏆 6. สรุปผล &amp; SQLite Leaderboard</button>
+    </nav>
+
+    <!-- TAB 0: 2D VECTOR ARCADE ACTION GAME -->
+    <section id="tab-view-arcade" class="card" style="display: flex; flex-direction: column; gap: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; background: var(--bg-main); padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-subtle);">
+        <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+          <div>
+            <div style="font-size: 11px; color: var(--text-muted);">พลังชีวิตองค์กร (HP)</div>
+            <div id="arc-hearts" style="font-size: 18px;">❤️❤️❤️</div>
+          </div>
+          <div>
+            <div style="font-size: 11px; color: var(--text-muted);">แพ็กเกจที่คัดแยกสำเร็จ</div>
+            <div id="arc-cleared" style="font-size: 15px; font-weight: 700; color: #34d399;">0 / 15 แพ็กเกจ</div>
+          </div>
+          <div>
+            <div style="font-size: 11px; color: var(--text-muted);">ตัวชี้วัดหลักสูตรแกนกลาง 2560</div>
+            <div id="arc-ind" style="font-size: 13px; font-weight: 700; color: #a5b4fc;">ว 4.1 และ ว 4.2</div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <button id="btn-arc-sound" class="btn">🔊 เสียง: เปิด</button>
+          <button id="btn-arc-start" class="btn btn-emerald" style="font-size: 14px; padding: 10px 20px;">▶️ เริ่มปล่อยแพ็กเกจข้อมูล!</button>
+        </div>
+      </div>
+
+      <!-- 2D Vector SVG Arena -->
+      <div id="arc-arena" style="position: relative; height: 320px; background: #070d19; border: 2px solid #4f46e5; border-radius: 16px; overflow: hidden;">
+        <svg viewBox="0 0 900 320" preserveAspectRatio="none" style="width: 100%; height: 100%; position: absolute; inset: 0; opacity: 0.35; pointer-events: none;">
+          <line x1="0" y1="265" x2="900" y2="265" stroke="#f43f5e" stroke-width="2.5" stroke-dasharray="8,6"/>
+          <text x="880" y="256" text-anchor="end" fill="#fda4af" font-size="12" font-weight="bold">⚠️ เส้นวิกฤตข้อมูลล้นระบบ (DEFENSE LINE)</text>
+        </svg>
+
+        <svg id="arc-laser-svg" viewBox="0 0 900 320" preserveAspectRatio="none" style="width: 100%; height: 100%; position: absolute; inset: 0; pointer-events: none;"></svg>
+
+        <div id="arc-packet-box" style="position: absolute; inset: 0; pointer-events: none;"></div>
+
+        <!-- Defender Bot Vector SVG -->
+        <div style="position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); width: 96px; height: 72px; pointer-events: none;">
+          <svg viewBox="0 0 120 90" style="width: 100%; height: 100%;">
+            <rect x="30" y="22" width="60" height="46" rx="12" fill="#1e1b4b" stroke="#6366f1" stroke-width="3"/>
+            <rect x="40" y="32" width="40" height="20" rx="6" fill="#0f172a"/>
+            <circle cx="50" cy="42" r="4" fill="#34d399"/>
+            <circle cx="70" cy="42" r="4" fill="#34d399"/>
+            <line x1="60" y1="6" x2="60" y2="22" stroke="#38bdf8" stroke-width="3"/>
+            <circle cx="60" cy="6" r="5" fill="#fde047"/>
+            <text x="60" y="62" text-anchor="middle" fill="#a5b4fc" font-size="8" font-weight="bold">IS-BOT v2.0</text>
+          </svg>
+        </div>
+
+        <!-- Overlay -->
+        <div id="arc-overlay" style="position: absolute; inset: 0; background: rgba(7, 13, 25, 0.86); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; gap: 12px;">
+          <span class="badge indigo">โหมดเกม 2D Arcade • คัดแยกแพ็กเกจข้อมูลด้วยเลเซอร์</span>
+          <h2 id="arc-ov-title" style="font-size: 22px; font-weight: 800;">ปกป้องเซิร์ฟเวอร์องค์กร: ยิงแพ็กเกจเข้าท่อระบบสารสนเทศทั้ง 6</h2>
+          <p id="arc-ov-desc" style="font-size: 13.5px; color: var(--text-muted); max-width: 620px;">
+            เมื่อแพ็กเกจข้อมูลธุรกิจลอยลงมา ให้คลิกปุ่มระบบ <strong>TPS, OAS, MIS, DSS, EIS หรือ ES</strong> ด้านล่าง (หรือกดปุ่มคีย์ลัด <strong>1 - 6</strong> บนคีย์บอร์ด) เพื่อยิงเลเซอร์คัดแยกข้อมูลก่อนถึงเส้นสีแดง!
+          </p>
+          <button id="btn-arc-overlay-start" class="btn btn-emerald" style="font-size: 15px; padding: 10px 24px;">🚀 เริ่มเกมเดี๋ยวนี้! (START GAME)</button>
+        </div>
+      </div>
+
+      <div id="arc-toast" class="feedback-banner ok" style="margin-top: 0;">
+        💡 เคล็ดลับ: กดปุ่มตัวเลข <strong>1 ถึง 6</strong> บนคีย์บอร์ด หรือคลิกการ์ดระบบด้านล่างเพื่อยิงเลเซอร์คัดแยกแพ็กเกจข้อมูล!
+      </div>
+
+      <!-- 6 Laser Turret Buttons -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 10px;">
+        <button class="choice-btn arc-fire-btn" data-fire="TPS" style="border-color: #10b981;">
+          <div style="display: flex; justify-content: space-between; font-weight: 800; color: #34d399;"><span>1. TPS</span><span class="badge emerald">Key 1</span></div>
+          <div style="font-size: 12.5px; font-weight: 700; margin-top: 4px;">ประมวลผลรายการรายวัน</div>
+          <div style="font-size: 11px; color: var(--text-muted);">POS, ATM, เช็กอินตั๋ว</div>
+        </button>
+        <button class="choice-btn arc-fire-btn" data-fire="OAS" style="border-color: #0ea5e9;">
+          <div style="display: flex; justify-content: space-between; font-weight: 800; color: #38bdf8;"><span>2. OAS</span><span class="badge indigo">Key 2</span></div>
+          <div style="font-size: 12.5px; font-weight: 700; margin-top: 4px;">สำนักงานอัตโนมัติ</div>
+          <div style="font-size: 11px; color: var(--text-muted);">e-Office, งานเอกสาร</div>
+        </button>
+        <button class="choice-btn arc-fire-btn" data-fire="MIS" style="border-color: #6366f1;">
+          <div style="display: flex; justify-content: space-between; font-weight: 800; color: #818cf8;"><span>3. MIS</span><span class="badge indigo">Key 3</span></div>
+          <div style="font-size: 12.5px; font-weight: 700; margin-top: 4px;">สารสนเทศเพื่อการจัดการ</div>
+          <div style="font-size: 11px; color: var(--text-muted);">สรุปรายเดือน, เทียบแผน</div>
+        </button>
+        <button class="choice-btn arc-fire-btn" data-fire="DSS" style="border-color: #f59e0b;">
+          <div style="display: flex; justify-content: space-between; font-weight: 800; color: #fbbf24;"><span>4. DSS</span><span class="badge amber">Key 4</span></div>
+          <div style="font-size: 12.5px; font-weight: 700; margin-top: 4px;">สนับสนุนการตัดสินใจ</div>
+          <div style="font-size: 11px; color: var(--text-muted);">จำลอง What-if, พยากรณ์</div>
+        </button>
+        <button class="choice-btn arc-fire-btn" data-fire="EIS" style="border-color: #f43f5e;">
+          <div style="display: flex; justify-content: space-between; font-weight: 800; color: #fb7185;"><span>5. EIS</span><span class="badge rose">Key 5</span></div>
+          <div style="font-size: 12.5px; font-weight: 700; margin-top: 4px;">ผู้บริหารระดับสูง</div>
+          <div style="font-size: 11px; color: var(--text-muted);">KPI 5 ปี, Drill-down</div>
+        </button>
+        <button class="choice-btn arc-fire-btn" data-fire="ES" style="border-color: #a855f7;">
+          <div style="display: flex; justify-content: space-between; font-weight: 800; color: #c084fc;"><span>6. ES / AI</span><span class="badge indigo">Key 6</span></div>
+          <div style="font-size: 12.5px; font-weight: 700; margin-top: 4px;">ระบบผู้เชี่ยวชาญ</div>
+          <div style="font-size: 11px; color: var(--text-muted);">Knowledge Base, วินิจฉัย</div>
+        </button>
+      </div>
+    </section>
+
+    <!-- TAB 1: KNOWLEDGE HUB & VECTOR SVG GALLERY -->
+    <section id="tab-view-hub" class="card hidden" style="display: flex; flex-direction: column; gap: 20px;">
+      <div class="grid-2" style="align-items: center;">
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <span class="badge emerald" style="align-self: flex-start;">ความเชื่อมโยงตัวชี้วัดหลักสูตรแกนกลาง พ.ศ. 2560</span>
+          <h2 style="font-size: 18px;">พีระมิดระบบสารสนเทศเพื่อการบริหารและการตัดสินใจในองค์กร</h2>
+          <p style="font-size: 13.5px; color: var(--text-muted);">
+            เนื้อหาออกแบบสำหรับนักศึกษาระดับชั้นปีที่ 2 เพื่อฝึกวิเคราะห์โครงสร้างระบบสารสนเทศตามระดับผู้ใช้งานในองค์กร
+            โดยเชื่อมโยงกับตัวชี้วัดหลักสูตรแกนกลางการศึกษาขั้นพื้นฐาน พ.ศ. 2551 (ฉบับปรับปรุง พ.ศ. 2560) สาระที่ 4 เทคโนโลยี:
+          </p>
+          <div id="indicators-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
+        </div>
+        <div class="svg-showcase">
+          <img src="./assets/svg/pyramid-overview.svg" alt="IS Organizational Pyramid Vector SVG" />
+        </div>
+      </div>
+
+      <hr style="border: none; border-top: 1px solid var(--border-subtle);" />
+
+      <div>
+        <h3 style="font-size: 17px; margin-bottom: 12px;">🎨 แผนภาพ Vector SVG ทั้ง 6 ประเภทของระบบสารสนเทศ (TPS, OAS, MIS, DSS, EIS, ES)</h3>
+        <div id="svg-cards-grid" class="grid-3"></div>
+      </div>
+    </section>
+
+    <!-- TAB 2: STAGE 1 - PYRAMID ARCHITECT -->
+    <section id="tab-view-stage1" class="card hidden" style="display: flex; flex-direction: column; gap: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div>
+          <span class="badge indigo">ด่านพีระมิดองค์กร • Organizational Pyramid Matching (ว 4.1)</span>
+          <h2 style="font-size: 18px; margin-top: 4px;">จับคู่ระดับชั้นของพีระมิดองค์กรกับประเภทระบบสารสนเทศ (4 ระดับ)</h2>
+          <p style="font-size: 13px; color: var(--text-muted);">คลิกเลือกระดับองค์กรด้านซ้าย แล้วคลิกเลือกระบบสารสนเทศด้านขวาให้ตรงกัน</p>
+        </div>
+        <button id="btn-reset-stage1" class="btn">รีเซ็ตด่านพีระมิด</button>
+      </div>
+
+      <div id="stage1-feedback" class="feedback-banner hidden"></div>
+
+      <div class="grid-2">
+        <div id="stage1-levels" style="display: flex; flex-direction: column; gap: 10px;"></div>
+        <div id="stage1-choices" style="display: flex; flex-direction: column; gap: 10px;"></div>
+      </div>
+    </section>
+
+    <!-- TAB 3: STAGE 2 - CASE STUDY CONSULTANT -->
+    <section id="tab-view-stage2" class="card hidden" style="display: flex; flex-direction: column; gap: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div>
+          <span class="badge emerald">ด่านกรณีศึกษาองค์กร • Enterprise Case Study Simulation (ว 4.2)</span>
+          <h2 id="case-header-title" style="font-size: 18px; margin-top: 4px;">วิเคราะห์กรณีศึกษาองค์กร</h2>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <span id="case-step-badge" class="badge indigo">ข้อที่ 1 / 10</span>
+          <button id="btn-case-hint" class="btn btn-amber">💡 ขอคำใบ้ (-20 คะแนน)</button>
+        </div>
+      </div>
+
+      <div style="background: var(--bg-main); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+          <span id="case-org" class="badge indigo">องค์กร</span>
+          <span id="case-indicator" class="badge emerald">ว 4.2</span>
+        </div>
+        <h3 id="case-title" style="font-size: 17px;"></h3>
+        <p id="case-desc" style="font-size: 14px; color: #e2e8f0;"></p>
+
+        <div class="grid-3">
+          <div style="background: var(--bg-card); padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border-subtle);">
+            <div style="font-size: 11px; color: var(--text-muted);">👤 ผู้ใช้งานหลัก (User Level)</div>
+            <div id="case-user" style="font-size: 13px; font-weight: 600; margin-top: 3px;"></div>
+          </div>
+          <div style="background: var(--bg-card); padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border-subtle);">
+            <div style="font-size: 11px; color: var(--text-muted);">⚙️ กระบวนการประมวลผล (Process)</div>
+            <div id="case-process" style="font-size: 13px; font-weight: 600; margin-top: 3px;"></div>
+          </div>
+          <div style="background: var(--bg-card); padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border-subtle);">
+            <div style="font-size: 11px; color: var(--text-muted);">📊 ผลลัพธ์ (Output)</div>
+            <div id="case-output" style="font-size: 13px; font-weight: 600; margin-top: 3px;"></div>
+          </div>
+        </div>
+
+        <div id="case-hint-display" class="feedback-banner hidden" style="border-color: var(--amber); color: #fde68a; background: rgba(245,158,11,0.12);"></div>
+      </div>
+
+      <div id="case-choices-grid" class="grid-3"></div>
+
+      <div id="case-feedback-box" class="feedback-banner hidden" style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">
+        <div style="flex: 1;">
+          <div id="case-fb-title" style="font-weight: 700; font-size: 15px;"></div>
+          <div id="case-fb-text" style="font-size: 13.5px; margin-top: 4px;"></div>
+        </div>
+        <button id="btn-next-case" class="btn btn-primary">ข้อต่อไป →</button>
+      </div>
+    </section>
+
+    <!-- TAB 4: STAGE 3 - SPEED MATRIX -->
+    <section id="tab-view-stage3" class="card hidden" style="display: flex; flex-direction: column; gap: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <span class="badge amber">ด่าน Speed Attribute Matrix</span>
+          <h2 style="font-size: 18px; margin-top: 4px;">จำแนกคุณลักษณะเด่นของระบบสารสนเทศอย่างรวดเร็ว</h2>
+        </div>
+        <span id="matrix-step-badge" class="badge indigo">ข้อที่ 1 / 6</span>
+      </div>
+
+      <div style="background: var(--bg-main); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 24px; text-align: center;">
+        <span id="matrix-cat" class="badge emerald">คุณลักษณะเด่น</span>
+        <h3 id="matrix-question" style="font-size: 19px; margin-top: 12px; max-width: 760px; margin-left: auto; margin-right: auto;"></h3>
+      </div>
+
+      <div id="matrix-choices-grid" class="grid-3"></div>
+
+      <div id="matrix-feedback-box" class="feedback-banner hidden" style="display: flex; justify-content: space-between; align-items: center;">
+        <span id="matrix-fb-text"></span>
+        <button id="btn-next-matrix" class="btn btn-primary">ถัดไป →</button>
+      </div>
+    </section>
+
+    <!-- TAB 5: ANALYTICS REPORT & SQLITE LEADERBOARD -->
+    <section id="tab-view-report" class="card hidden" style="display: flex; flex-direction: column; gap: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <div>
+          <span class="badge emerald">SQLite Learning Analytics &amp; Leaderboard</span>
+          <h2 style="font-size: 19px; margin-top: 4px;">สรุปผลการเรียนรู้ตามตัวชี้วัดหลักสูตรแกนกลาง 2560 และตารางคะแนน SQLite</h2>
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <button id="btn-save-sqlite" class="btn btn-emerald">💾 บันทึกคะแนนลงฐานข้อมูล SQLite</button>
+          <button id="btn-reset-all" class="btn">🔄 เริ่มเล่นใหม่</button>
+        </div>
+      </div>
+
+      <div id="save-session-msg" class="feedback-banner ok hidden"></div>
+
+      <div class="grid-3">
+        <div class="is-card">
+          <div style="font-size: 12px; color: var(--text-muted);">คะแนนรวมของคุณ</div>
+          <div id="rep-score" style="font-size: 28px; font-weight: 800; color: #fbbf24;">0</div>
+          <div id="rep-acc" style="font-size: 13px; color: #34d399;">ความแม่นยำ: 0%</div>
+        </div>
+        <div class="is-card">
+          <div style="font-size: 12px; color: var(--text-muted);">ระดับสมรรถนะ (IS Rank)</div>
+          <div id="rep-rank" style="font-size: 18px; font-weight: 800; color: #a5b4fc;">Junior IS Learner</div>
+          <div id="rep-done" style="font-size: 13px; color: var(--text-muted);">ความก้าวหน้า: 0/20 ภารกิจ</div>
+        </div>
+        <div class="is-card">
+          <div style="font-size: 12px; color: var(--text-muted);">สถานะฐานข้อมูล SQLite</div>
+          <div id="rep-db-engine" style="font-size: 14px; font-weight: 700; color: #6ee7b7;">SQLite3</div>
+          <div id="rep-db-path" style="font-size: 11px; color: var(--text-muted); word-break: break-all;">data/is_game.sqlite</div>
+        </div>
+      </div>
+
+      <!-- SQLite Leaderboard Table -->
+      <div style="background: var(--bg-main); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 16px;">
+        <h3 style="font-size: 16px; margin-bottom: 12px;">🏆 ตารางอันดับคะแนนนักศึกษาชั้นปีที่ 2 (ดึงข้อมูลจาก SQLite Database)</h3>
+        <div style="overflow-x: auto;">
+          <table class="leaderboard-table">
+            <thead>
+              <tr>
+                <th>อันดับ</th>
+                <th>รหัสนักศึกษา</th>
+                <th>ชื่อ-นามสกุล</th>
+                <th>คะแนนรวม</th>
+                <th>ความแม่นยำ</th>
+                <th>ระดับสมรรถนะ (Rank)</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Instructor Custom Question Builder (SQLite INSERT) -->
+      <div style="background: var(--bg-main); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 16px;">
+        <h3 style="font-size: 16px; margin-bottom: 8px;">➕ โหมดอาจารย์ผู้สอน: เพิ่มโจทย์กรณีศึกษาใหม่ลงฐานข้อมูล SQLite</h3>
+        <div class="grid-3" style="margin-top: 10px;">
+          <input type="text" id="new-q-org" placeholder="ชื่อองค์กร (เช่น 🏥 โรงพยาบาลศิริราช)" />
+          <input type="text" id="new-q-title" placeholder="หัวข้อกรณีศึกษา" />
+          <select id="new-q-code">
+            <option value="TPS">เฉลย: TPS (ระบบประมวลผลรายการประจำวัน)</option>
+            <option value="OAS">เฉลย: OAS (ระบบสำนักงานอัตโนมัติ)</option>
+            <option value="MIS">เฉลย: MIS (ระบบสารสนเทศเพื่อการจัดการ)</option>
+            <option value="DSS">เฉลย: DSS (ระบบสนับสนุนการตัดสินใจ)</option>
+            <option value="EIS">เฉลย: EIS (ระบบสารสนเทศผู้บริหารระดับสูง)</option>
+            <option value="ES">เฉลย: ES (ระบบผู้เชี่ยวชาญ/AI)</option>
+          </select>
+        </div>
+        <textarea id="new-q-desc" rows="2" placeholder="รายละเอียดสถานการณ์ของระบบสารสนเทศ..." style="width: 100%; margin-top: 10px;"></textarea>
+        <div style="display: flex; gap: 10px; margin-top: 10px;">
+          <input type="text" id="new-q-exp" placeholder="คำอธิบายเฉลย..." style="flex: 1;" />
+          <button id="btn-add-question" class="btn btn-primary">บันทึกโจทย์ใหม่ลง SQLite</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IS Cyber Quest — เกม 2D Vector SVG จำแนกประเภทของระบบสารสนเทศ</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    @keyframes floatBot {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { filter: drop-shadow(0 0 6px rgba(99, 102, 241, 0.6)); }
+      50% { filter: drop-shadow(0 0 14px rgba(16, 185, 129, 0.9)); }
+    }
+    .bot-float { animation: floatBot 2.4s ease-in-out infinite; }
+    .glow-svg { animation: pulseGlow 3s ease-in-out infinite; }
+  </style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased p-3 md:p-5 select-none">
+
+  <div class="max-w-5xl mx-auto space-y-4">
+
+    <!-- Top Game Header -->
+    <header class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <div class="flex items-center gap-3.5">
+        <div class="w-14 h-14 shrink-0 glow-svg">
+          <svg viewBox="0 0 120 120" class="w-full h-full">
+            <defs>
+              <linearGradient id="gShield" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#10b981"/>
+              </linearGradient>
+            </defs>
+            <polygon points="60,6 110,32 110,88 60,114 10,88 10,32" fill="#0f172a" stroke="url(#gShield)" stroke-width="5"/>
+            <polygon points="60,24 94,82 26,82" fill="url(#gShield)" opacity="0.9"/>
+            <circle cx="60" cy="62" r="10" fill="#fde047"/>
+            <text x="60" y="102" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">IS GAME</text>
+          </svg>
+        </div>
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <h1 class="text-lg md:text-xl font-extrabold text-[var(--foreground)]">🎮 IS Cyber Defender: เกมจำแนกประเภทระบบสารสนเทศ</h1>
+            <span class="px-2.5 py-0.5 text-xs font-bold rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
+              นักศึกษาชั้นปีที่ 2
+            </span>
+            <span class="px-2.5 py-0.5 text-xs font-bold rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+              ตัวชี้วัดหลักสูตรแกนกลาง 2560 (ว 4.1 &amp; ว 4.2)
+            </span>
+          </div>
+          <p class="text-xs text-[var(--muted-foreground)] mt-0.5">
+            เกม 2D Vector SVG คัดแยกแพ็กเกจข้อมูลเข้าสู่ระบบ TPS, OAS, MIS, DSS, EIS และ ES พร้อมระบบหัวใจ HP, ด่านบอส และ SQLite Leaderboard
+          </p>
+        </div>
+      </div>
+
+      <!-- Live HUD Stats -->
+      <div class="flex items-center gap-3 self-end md:self-center bg-[var(--background)] border border-[var(--border)] rounded-xl px-3.5 py-2">
+        <button onclick="toggleSound()" id="btn-sound" class="px-2.5 py-1 rounded-lg bg-[var(--card)] border border-[var(--border)] text-xs font-bold">
+          🔊 เสียง: เปิด
+        </button>
+        <div class="text-center px-2 border-l border-[var(--border)]">
+          <div class="text-xs text-[var(--muted-foreground)]">SCORE</div>
+          <div id="hud-score" class="text-base font-extrabold text-amber-400">0</div>
+        </div>
+        <div class="text-center px-2 border-l border-[var(--border)]">
+          <div class="text-xs text-[var(--muted-foreground)]">COMBO</div>
+          <div id="hud-combo" class="text-base font-extrabold text-emerald-400">x0</div>
+        </div>
+        <div class="text-center px-2 border-l border-[var(--border)]">
+          <div class="text-xs text-[var(--muted-foreground)]">LEVEL</div>
+          <div id="hud-level" class="text-base font-extrabold text-indigo-400">1</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Game Mode Navigation -->
+    <nav class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-[var(--card)] border border-[var(--border)] p-1.5 rounded-xl">
+      <button onclick="switchMode('arcade')" id="tab-arcade" class="px-3 py-2.5 rounded-lg text-xs md:text-sm font-bold transition-all bg-[var(--primary)] text-[var(--primary-foreground)] shadow-sm">
+        🕹️ 1. โหมดเกม Arcade (Action)
+      </button>
+      <button onclick="switchMode('tower')" id="tab-tower" class="px-3 py-2.5 rounded-lg text-xs md:text-sm font-bold transition-all text-[var(--muted-foreground)] hover:text-[var(--foreground)]">
+        🏰 2. โหมดสร้างตึกพีระมิด &amp; บอส
+      </button>
+      <button onclick="switchMode('svgpedia')" id="tab-svgpedia" class="px-3 py-2.5 rounded-lg text-xs md:text-sm font-bold transition-all text-[var(--muted-foreground)] hover:text-[var(--foreground)]">
+        🎨 3. คลังภาพ Vector SVG &amp; ตัวชี้วัด
+      </button>
+      <button onclick="switchMode('leaderboard')" id="tab-leaderboard" class="px-3 py-2.5 rounded-lg text-xs md:text-sm font-bold transition-all text-[var(--muted-foreground)] hover:text-[var(--foreground)]">
+        🏆 4. SQLite Leaderboard
+      </button>
+    </nav>
+
+    <!-- ==================== MODE 1: 2D VECTOR ARCADE GAME ==================== -->
+    <section id="mode-arcade" class="space-y-4">
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 shadow-sm space-y-4">
+
+        <!-- Arcade Top Control Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-3 bg-[var(--background)] border border-[var(--border)] rounded-xl p-3">
+          <div class="flex items-center gap-4">
+            <div>
+              <span class="text-xs text-[var(--muted-foreground)] block">พลังชีวิตองค์กร (HP)</span>
+              <div id="arcade-hearts" class="text-base tracking-widest">❤️❤️❤️</div>
+            </div>
+            <div class="border-l border-[var(--border)] pl-4">
+              <span class="text-xs text-[var(--muted-foreground)] block">แพ็กเกจที่คัดแยกสำเร็จ</span>
+              <div id="arcade-cleared" class="text-sm font-bold text-emerald-400">0 / 15 แพ็กเกจ</div>
+            </div>
+            <div class="border-l border-[var(--border)] pl-4 hidden sm:block">
+              <span class="text-xs text-[var(--muted-foreground)] block">ตัวชี้วัดที่กำลังทดสอบ</span>
+              <div id="arcade-indicator" class="text-xs font-bold text-indigo-400">ว 4.1 และ ว 4.2 (หลักสูตรแกนกลาง 2560)</div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <select id="arcade-speed" class="px-2.5 py-1.5 rounded-lg bg-[var(--card)] border border-[var(--border)] text-xs font-semibold">
+              <option value="1">ความเร็ว: ปกติ (ปี 2 มาตรฐาน)</option>
+              <option value="1.4">ความเร็ว: เร็ว (Hardcore CIO)</option>
+              <option value="0.7">ความเร็ว: ช้า (โหมดฝึกหัด)</option>
+            </select>
+            <button onclick="startArcadeGame()" id="btn-start-arcade" class="px-4 py-2 rounded-xl bg-emerald-500 text-slate-950 font-extrabold text-xs md:text-sm hover:opacity-90 transition shadow-sm">
+              ▶️ เริ่มปล่อยแพ็กเกจข้อมูล!
+            </button>
+          </div>
+        </div>
+
+        <!-- 2D Vector SVG Interactive Game Arena -->
+        <div class="relative rounded-2xl overflow-hidden border-2 border-indigo-500/40 bg-[#070d19]" style="height: 330px;">
+          <!-- Background Cyber Grid Vector SVG -->
+          <svg viewBox="0 0 900 330" preserveAspectRatio="none" class="w-full h-full absolute inset-0 opacity-35 pointer-events-none">
+            <defs>
+              <pattern id="cyberGrid" width="45" height="45" patternUnits="userSpaceOnUse">
+                <path d="M 45 0 L 0 0 0 45" fill="none" stroke="#334155" stroke-width="1"/>
+              </pattern>
+            </defs>
+            <rect width="900" height="330" fill="url(#cyberGrid)"/>
+            <line x1="0" y1="275" x2="900" y2="275" stroke="#f43f5e" stroke-width="2" stroke-dasharray="8,6"/>
+            <text x="885" y="268" text-anchor="end" fill="#fda4af" font-size="11" font-weight="bold">⚠️ เส้นวิกฤตข้อมูลล้นระบบ (DEFENSE LINE)</text>
+          </svg>
+
+          <!-- Laser Beam SVG Layer -->
+          <svg id="laser-svg" viewBox="0 0 900 330" preserveAspectRatio="none" class="w-full h-full absolute inset-0 pointer-events-none"></svg>
+
+          <!-- Falling Data Packet Card (Animated by JS requestAnimationFrame) -->
+          <div id="packet-container" class="absolute inset-0 pointer-events-none"></div>
+
+          <!-- Center Defender Robot Mascot (Vector SVG) -->
+          <div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none bot-float">
+            <svg viewBox="0 0 120 90" class="w-24 h-18">
+              <rect x="30" y="22" width="60" height="46" rx="12" fill="#1e1b4b" stroke="#6366f1" stroke-width="3"/>
+              <rect x="40" y="32" width="40" height="20" rx="6" fill="#0f172a"/>
+              <circle cx="50" cy="42" r="4" fill="#34d399"/>
+              <circle cx="70" cy="42" r="4" fill="#34d399"/>
+              <line x1="60" y1="6" x2="60" y2="22" stroke="#38bdf8" stroke-width="3"/>
+              <circle cx="60" cy="6" r="5" fill="#fde047"/>
+              <rect x="18" y="36" width="12" height="22" rx="4" fill="#4f46e5"/>
+              <rect x="90" y="36" width="12" height="22" rx="4" fill="#4f46e5"/>
+              <text x="60" y="62" text-anchor="middle" fill="#a5b4fc" font-size="8" font-weight="bold">IS-BOT v2.0</text>
+            </svg>
+          </div>
+
+          <!-- Overlay Start / Feedback Screen -->
+          <div id="arcade-overlay" class="absolute inset-0 bg-slate-950/80 backdrop-blur-xs flex flex-col items-center justify-center p-6 text-center space-y-3">
+            <div class="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold border border-indigo-500/40">
+              ภารกิจปกป้องเซิร์ฟเวอร์องค์กร • หลักสูตรแกนกลาง 2560
+            </div>
+            <h2 id="overlay-title" class="text-xl md:text-2xl font-extrabold text-white">
+              พร้อมคัดแยกแพ็กเกจข้อมูลเข้าสู่ระบบสารสนเทศทั้ง 6 หรือยัง?
+            </h2>
+            <p id="overlay-desc" class="text-xs md:text-sm text-slate-300 max-w-xl">
+              เมื่อแพ็กเกจข้อมูลธุรกิจลอยลงมา ให้วิเคราะห์ว่าเป็นงานของระบบใด แล้วคลิกปุ่ม <strong>TPS, OAS, MIS, DSS, EIS หรือ ES</strong> ด้านล่าง (หรือกดปุ่มตัวเลข <strong>1 - 6</strong> บนคีย์บอร์ด) เพื่อยิงเลเซอร์ส่งข้อมูลเข้าท่อให้ทันก่อนถึงเส้นสีแดง!
+            </p>
+            <button onclick="startArcadeGame()" class="px-6 py-2.5 rounded-xl bg-emerald-500 text-slate-950 font-extrabold text-sm hover:scale-105 transition shadow-lg">
+              🚀 เริ่มภารกิจเดี๋ยวนี้! (START GAME)
+            </button>
+          </div>
+        </div>
+
+        <!-- Live Feedback Toast -->
+        <div id="arcade-toast" class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)] text-xs md:text-sm font-semibold flex items-center justify-between">
+          <span id="arcade-toast-text">💡 เคล็ดลับ: คุณสามารถกดปุ่มตัวเลข 1 ถึง 6 บนคีย์บอร์ดเพื่อยิงเลเซอร์คัดแยกระบบได้อย่างรวดเร็ว!</span>
+          <span class="text-xs text-[var(--muted-foreground)]">คีย์ลัด: [1] TPS • [2] OAS • [3] MIS • [4] DSS • [5] EIS • [6] ES</span>
+        </div>
+
+        <!-- 6 Target System Blasters (Vector SVG Buttons) -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
+          <button onclick="fireLaser('TPS')" class="group p-3 rounded-xl bg-emerald-950/60 border-2 border-emerald-500/50 hover:border-emerald-400 hover:scale-[1.02] active:scale-95 transition text-left">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-extrabold text-emerald-300">1. TPS</span>
+              <span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-xs font-bold">Key 1</span>
+            </div>
+            <div class="text-xs font-bold text-white mt-1">ประมวลผลรายวัน</div>
+            <div class="text-xs text-emerald-200/80 mt-0.5">POS, ATM, เช็กอิน</div>
+          </button>
+
+          <button onclick="fireLaser('OAS')" class="group p-3 rounded-xl bg-sky-950/60 border-2 border-sky-500/50 hover:border-sky-400 hover:scale-[1.02] active:scale-95 transition text-left">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-extrabold text-sky-300">2. OAS</span>
+              <span class="px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 text-xs font-bold">Key 2</span>
+            </div>
+            <div class="text-xs font-bold text-white mt-1">สำนักงานอัตโนมัติ</div>
+            <div class="text-xs text-sky-200/80 mt-0.5">งานเอกสาร, นัดหมาย</div>
+          </button>
+
+          <button onclick="fireLaser('MIS')" class="group p-3 rounded-xl bg-indigo-950/60 border-2 border-indigo-500/50 hover:border-indigo-400 hover:scale-[1.02] active:scale-95 transition text-left">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-extrabold text-indigo-300">3. MIS</span>
+              <span class="px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 text-xs font-bold">Key 3</span>
+            </div>
+            <div class="text-xs font-bold text-white mt-1">รายงานเพื่อการจัดการ</div>
+            <div class="text-xs text-indigo-200/80 mt-0.5">สรุปรายเดือน, เทียบแผน</div>
+          </button>
+
+          <button onclick="fireLaser('DSS')" class="group p-3 rounded-xl bg-amber-950/60 border-2 border-amber-500/50 hover:border-amber-400 hover:scale-[1.02] active:scale-95 transition text-left">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-extrabold text-amber-300">4. DSS</span>
+              <span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 text-xs font-bold">Key 4</span>
+            </div>
+            <div class="text-xs font-bold text-white mt-1">สนับสนุนตัดสินใจ</div>
+            <div class="text-xs text-amber-200/80 mt-0.5">จำลอง What-if, พยากรณ์</div>
+          </button>
+
+          <button onclick="fireLaser('EIS')" class="group p-3 rounded-xl bg-rose-950/60 border-2 border-rose-500/50 hover:border-rose-400 hover:scale-[1.02] active:scale-95 transition text-left">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-extrabold text-rose-300">5. EIS</span>
+              <span class="px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 text-xs font-bold">Key 5</span>
+            </div>
+            <div class="text-xs font-bold text-white mt-1">ผู้บริหารระดับสูง</div>
+            <div class="text-xs text-rose-200/80 mt-0.5">KPI 5 ปี, Drill-down</div>
+          </button>
+
+          <button onclick="fireLaser('ES')" class="group p-3 rounded-xl bg-purple-950/60 border-2 border-purple-500/50 hover:border-purple-400 hover:scale-[1.02] active:scale-95 transition text-left">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-extrabold text-purple-300">6. ES / AI</span>
+              <span class="px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 text-xs font-bold">Key 6</span>
+            </div>
+            <div class="text-xs font-bold text-white mt-1">ระบบผู้เชี่ยวชาญ</div>
+            <div class="text-xs text-purple-200/80 mt-0.5">ฐานความรู้, วินิจฉัย</div>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== MODE 2: TOWER BUILDER & BOSS BATTLE ==================== -->
+    <section id="mode-tower" class="hidden space-y-4">
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border)] pb-3">
+          <div>
+            <span class="text-xs font-bold text-amber-400 uppercase">โหมดที่ 2 • Enterprise Tower Builder &amp; Boss Quest</span>
+            <h2 class="text-base md:text-lg font-bold">ภารกิจสร้างตึกพีระมิดองค์กร 4 ชั้น &amp; ปราบบอสวิกฤตข้อมูล</h2>
+          </div>
+          <button onclick="resetTowerMode()" class="px-3 py-1.5 rounded-lg border border-[var(--border)] text-xs font-bold">🔄 รีเซ็ตตึกองค์กร</button>
+        </div>
+
+        <div id="tower-feedback" class="hidden p-3.5 rounded-xl border text-xs md:text-sm font-semibold"></div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
+          <!-- Left: Interactive Vector SVG Pyramid Tower that lights up as floors are built -->
+          <div class="lg:col-span-6 rounded-xl bg-[#0b1120] border border-[var(--border)] p-4 text-center">
+            <div class="text-xs font-bold text-indigo-300 mb-2">🏗️ โครงสร้างตึกองค์กรอัจฉริยะ (คลิกเลือกชั้นที่ต้องการติดตั้งระบบ)</div>
+            <svg viewBox="0 0 500 320" class="w-full h-auto">
+              <!-- Floor 4: Strategic (EIS) -->
+              <g onclick="selectTowerFloor(0)" class="cursor-pointer hover:opacity-90">
+                <polygon id="svg-floor-0" points="250,25 320,90 180,90" fill="#1e293b" stroke="#f43f5e" stroke-width="2.5"/>
+                <text id="txt-floor-0" x="250" y="72" text-anchor="middle" fill="#fda4af" font-size="13" font-weight="bold">ชั้นที่ 4: ระดับกลยุทธ์ [?]</text>
+              </g>
+              <!-- Floor 3: Analytical (DSS) -->
+              <g onclick="selectTowerFloor(1)" class="cursor-pointer hover:opacity-90">
+                <polygon id="svg-floor-1" points="174,98 326,98 370,162 130,162" fill="#1e293b" stroke="#f59e0b" stroke-width="2.5"/>
+                <text id="txt-floor-1" x="250" y="135" text-anchor="middle" fill="#fde68a" font-size="13" font-weight="bold">ชั้นที่ 3: ระดับวิเคราะห์ทางเลือก [?]</text>
+              </g>
+              <!-- Floor 2: Management (MIS) -->
+              <g onclick="selectTowerFloor(2)" class="cursor-pointer hover:opacity-90">
+                <polygon id="svg-floor-2" points="124,170 376,170 420,234 80,234" fill="#1e293b" stroke="#6366f1" stroke-width="2.5"/>
+                <text id="txt-floor-2" x="250" y="207" text-anchor="middle" fill="#c7d2fe" font-size="13" font-weight="bold">ชั้นที่ 2: ระดับบริหารควบคุม [?]</text>
+              </g>
+              <!-- Floor 1: Operational (TPS) -->
+              <g onclick="selectTowerFloor(3)" class="cursor-pointer hover:opacity-90">
+                <polygon id="svg-floor-3" points="74,242 426,242 470,306 30,306" fill="#1e293b" stroke="#10b981" stroke-width="2.5"/>
+                <text id="txt-floor-3" x="250" y="279" text-anchor="middle" fill="#a7f3d0" font-size="14" font-weight="bold">ชั้นที่ 1: ระดับปฏิบัติการรายวัน [?]</text>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Right: Floor Mission Details & System Installer -->
+          <div class="lg:col-span-6 space-y-3">
+            <div class="p-4 rounded-xl bg-[var(--background)] border border-[var(--border)] space-y-2">
+              <div id="tower-selected-title" class="text-sm md:text-base font-extrabold text-amber-400">
+                👆 คลิกเลือกชั้นของตึกองค์กรด้านซ้ายเพื่อดูโจทย์ความต้องการ
+              </div>
+              <p id="tower-selected-desc" class="text-xs md:text-sm text-[var(--muted-foreground)]">
+                เมื่อติดตั้งระบบครบทั้ง 4 ชั้น ตึกองค์กรจะเปิดใช้งานพลังงานเต็มรูปแบบและรับโบนัส +500 คะแนน!
+              </p>
+            </div>
+
+            <div class="text-xs font-bold text-[var(--muted-foreground)]">เลือกติดตั้งโมดูลระบบสารสนเทศลงในชั้นที่เลือก:</div>
+            <div class="grid grid-cols-2 gap-2.5">
+              <button onclick="installTowerSystem('TPS')" class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)] hover:border-emerald-400 text-left">
+                <div class="text-sm font-extrabold text-emerald-400">ติดตั้ง TPS</div>
+                <div class="text-xs text-[var(--muted-foreground)]">ประมวลผลรายการประจำวัน</div>
+              </button>
+              <button onclick="installTowerSystem('MIS')" class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)] hover:border-indigo-400 text-left">
+                <div class="text-sm font-extrabold text-indigo-400">ติดตั้ง MIS</div>
+                <div class="text-xs text-[var(--muted-foreground)]">รายงานสรุปประจำงวด</div>
+              </button>
+              <button onclick="installTowerSystem('DSS')" class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)] hover:border-amber-400 text-left">
+                <div class="text-sm font-extrabold text-amber-400">ติดตั้ง DSS</div>
+                <div class="text-xs text-[var(--muted-foreground)]">จำลองสถานการณ์ What-if</div>
+              </button>
+              <button onclick="installTowerSystem('EIS')" class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)] hover:border-rose-400 text-left">
+                <div class="text-sm font-extrabold text-rose-400">ติดตั้ง EIS</div>
+                <div class="text-xs text-[var(--muted-foreground)]">Strategic KPI Dashboard</div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== MODE 3: VECTOR SVG GALLERY & CURRICULUM ==================== -->
+    <section id="mode-svgpedia" class="hidden space-y-4">
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm space-y-4">
+        <div>
+          <span class="text-xs font-bold text-emerald-400 uppercase">Vector SVG Illustrations &amp; Curriculum 2560</span>
+          <h2 class="text-base md:text-lg font-bold">คลังภาพประกอบ Vector SVG ทั้ง 6 ระบบ และความเชื่อมโยงตัวชี้วัดหลักสูตรแกนกลาง 2560</h2>
+        </div>
+        <div id="svgpedia-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+      </div>
+    </section>
+
+    <!-- ==================== MODE 4: SQLITE LEADERBOARD ==================== -->
+    <section id="mode-leaderboard" class="hidden space-y-4">
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border)] pb-4">
+          <div>
+            <span class="text-xs font-bold text-emerald-400 uppercase">SQLite Database Leaderboard</span>
+            <h2 class="text-base md:text-lg font-bold">บันทึกคะแนนผู้เล่นลงฐานข้อมูล SQLite (`data/is_game.sqlite`)</h2>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <input id="player-id" type="text" value="67010299" placeholder="รหัสนักศึกษา" class="px-3 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs font-bold w-32" />
+            <input id="player-name" type="text" value="นักศึกษาชั้นปีที่ 2" placeholder="ชื่อ-นามสกุล" class="px-3 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs font-bold w-44" />
+            <button onclick="savePlayerScore()" class="px-4 py-1.5 rounded-lg bg-emerald-500 text-slate-950 text-xs font-extrabold">
+              💾 บันทึกคะแนนลง SQLite
+            </button>
+          </div>
+        </div>
+
+        <div id="save-banner" class="hidden p-3 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 text-xs font-bold"></div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-[var(--border)] text-[var(--muted-foreground)]">
+                <th class="py-2.5 px-3">อันดับ</th>
+                <th class="py-2.5 px-3">รหัสนักศึกษา</th>
+                <th class="py-2.5 px-3">ชื่อ-นามสกุล</th>
+                <th class="py-2.5 px-3">คะแนนรวม</th>
+                <th class="py-2.5 px-3">เลเวลสูงสุด</th>
+                <th class="py-2.5 px-3">ตำแหน่ง (IS Rank)</th>
+              </tr>
+            </thead>
+            <tbody id="lb-rows"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    // ==================== WEB AUDIO SYNTHESIZER (SOUND EFFECTS) ====================
+    let soundEnabled = true;
+    let audioCtx = null;
+
+    function playTone(freq, type = 'sine', duration = 0.14) {
+      if (!soundEnabled) return;
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (_) {}
+    }
+
+    function sfxLaserOk() {
+      playTone(520, 'triangle', 0.08);
+      setTimeout(() => playTone(780, 'sine', 0.15), 60);
+    }
+
+    function sfxError() {
+      playTone(180, 'sawtooth', 0.22);
+    }
+
+    function sfxLevelUp() {
+      playTone(440, 'sine', 0.1);
+      setTimeout(() => playTone(660, 'sine', 0.1), 90);
+      setTimeout(() => playTone(880, 'sine', 0.2), 180);
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      document.getElementById('btn-sound').textContent = soundEnabled ? '🔊 เสียง: เปิด' : '🔇 เสียง: ปิด';
+    }
+
+    // ==================== GAME PACKETS & DATA ====================
+    const PACKETS = [
+      { title: 'สแกนบาร์โค้ดขายสินค้าหน้าร้าน POS 1,250 บาท', hint: 'ธุรกรรมรายวัน Real-time', code: 'TPS', ind: 'ว 4.1' },
+      { title: 'ฝาก-ถอนเงินสดผ่านตู้ ATM ธนาคารและตัดยอดบัญชีทันที', hint: 'รายการธุรกรรมประจำวัน', code: 'TPS', ind: 'ว 4.1' },
+      { title: 'สแกนพาสปอร์ตเช็กอินที่นั่งสายการบินและพิมพ์ Boarding Pass', hint: 'ประมวลผลรายการรายวัน', code: 'TPS', ind: 'ว 4.1' },
+      { title: 'ส่งหนังสือราชการเวียนออนไลน์และลงนามดิจิทัล (e-Office)', hint: 'งานเอกสารสำนักงาน', code: 'OAS', ind: 'ว 4.1' },
+      { title: 'จัดตารางนัดหมายประชุมออนไลน์และจองห้องประชุมอัตโนมัติ', hint: 'การสื่อสารในสำนักงาน', code: 'OAS', ind: 'ว 4.1' },
+      { title: 'รายงานสรุปยอดขายประจำเดือนเทียบกับเป้าหมายให้ผู้จัดการสาขา', hint: 'รายงานตามรอบเวลา (Scheduled Report)', code: 'MIS', ind: 'ว 4.2' },
+      { title: 'รายงานแจ้งเตือนโครงการก่อสร้างที่ใช้งบเกินแผน 5% (Exception Report)', hint: 'รายงานควบคุมงบประมาณ', code: 'MIS', ind: 'ว 4.2' },
+      { title: 'ทดลองปรับตัวแปรราคาน้ำมัน (What-if Analysis) เพื่อหาเส้นทางขนส่งที่คุ้มที่สุด', hint: 'จำลองสถานการณ์ What-if', code: 'DSS', ind: 'ว 4.2' },
+      { title: 'จำลองผลกระทบพอร์ตการลงทุนหากธนาคารกลางขึ้นดอกเบี้ย 0.50%', hint: 'โมเดลวิเคราะห์ทางเลือก', code: 'DSS', ind: 'ว 4.2' },
+      { title: 'หน้าจอ Executive Dashboard แสดง KPI ยุทธศาสตร์ 5 ปีของอธิการบดี', hint: 'ระดับกลยุทธ์ & Drill-down', code: 'EIS', ind: 'ว 4.1' },
+      { title: 'กระดานเปรียบเทียบส่วนแบ่งตลาดกับคู่แข่งภายนอกสำหรับ CEO', hint: 'ผู้บริหารระดับสูง', code: 'EIS', ind: 'ว 4.2' },
+      { title: 'ระบบวินิจฉัยโรคข้าวจากอาการใบเหลืองด้วย Knowledge Base & Inference Engine', hint: 'เลียนแบบผู้เชี่ยวชาญเฉพาะทาง', code: 'ES', ind: 'ว 4.2' },
+      { title: 'ระบบ AI วิเคราะห์สาเหตุเครื่องจักรโรงงานขัดข้องจากฐานความรู้วิศวกรอาวุโส', hint: 'ระบบผู้เชี่ยวชาญ', code: 'ES', ind: 'ว 4.2' }
+    ];
+
+    const TOWER_FLOORS = [
+      { idx: 0, name: 'ชั้นที่ 4 (ยอดพีระมิด): ระดับกลยุทธ์ (Strategic Level)', desc: 'ผู้บริหารสูงสุด (CEO/อธิการบดี) ต้องการดู KPI ภาพรวมระยะยาว 3–5 ปี แนวโน้มคู่แข่ง และทำ Drill-down', answer: 'EIS', color: '#e11d48' },
+      { idx: 1, name: 'ชั้นที่ 3: ระดับบริหารวิเคราะห์ทางเลือก (Analytical Level)', desc: 'นักวิเคราะห์และผู้จัดการฝ่ายวางแผนต้องการจำลองสถานการณ์ What-if Analysis ในปัญหากึ่งมีโครงสร้าง', answer: 'DSS', color: '#d97706' },
+      { idx: 2, name: 'ชั้นที่ 2: ระดับบริหารจัดการและควบคุม (Management Level)', desc: 'ผู้จัดการสาขาต้องการรายงานสรุปประจำเดือน (Scheduled Report) และรายงานสิ่งผิดปกติ (Exception Report)', answer: 'MIS', color: '#4f46e5' },
+      { idx: 3, name: 'ชั้นที่ 1 (ฐานพีระมิด): ระดับปฏิบัติการ (Operational Level)', desc: 'พนักงานหน้างานต้องการบันทึกธุรกรรมรายวันที่เกิดขึ้นซ้ำๆ จำนวนมากอย่างรวดเร็วแบบ Real-time', answer: 'TPS', color: '#059669' }
+    ];
+
+    let game = {
+      score: 0,
+      combo: 0,
+      level: 1,
+      hp: 3,
+      cleared: 0,
+      targetClear: 15,
+      running: false,
+      animId: null,
+      activePacket: null, // { data, y, x }
+      selectedFloor: null,
+      installedFloors: {},
+      leaderboard: [
+        { id: '67010201', name: 'น.ส.กมลชนก รัตนโชติ (ปี 2)', score: 3450, level: 5, rank: '🏆 Chief Information Officer (CIO)' },
+        { id: '67010214', name: 'นายธนภัทร ศรีสุวรรณ (ปี 2)', score: 2680, level: 4, rank: '⭐ Senior IS Architect' },
+        { id: '67010239', name: 'น.ส.พิมพ์ชนก วงศ์สวัสดิ์ (ปี 2)', score: 1950, level: 3, rank: '💼 Systems Analyst' }
+      ]
+    };
+
+    function updateHUD() {
+      document.getElementById('hud-score').textContent = game.score.toLocaleString();
+      document.getElementById('hud-combo').textContent = 'x' + game.combo;
+      document.getElementById('hud-level').textContent = game.level;
+      document.getElementById('arcade-hearts').textContent = '❤️'.repeat(Math.max(0, game.hp)) + '🖤'.repeat(Math.max(0, 3 - game.hp));
+      document.getElementById('arcade-cleared').textContent = `${game.cleared} / ${game.targetClear} แพ็กเกจ`;
+    }
+
+    function switchMode(mode) {
+      ['arcade', 'tower', 'svgpedia', 'leaderboard'].forEach(m => {
+        document.getElementById('mode-' + m).classList.toggle('hidden', m !== mode);
+        const btn = document.getElementById('tab-' + m);
+        btn.className = m === mode
+          ? 'px-3 py-2.5 rounded-lg text-xs md:text-sm font-bold transition-all bg-[var(--primary)] text-[var(--primary-foreground)] shadow-sm'
+          : 'px-3 py-2.5 rounded-lg text-xs md:text-sm font-bold transition-all text-[var(--muted-foreground)] hover:text-[var(--foreground)]';
+      });
+      if (mode === 'Leaderboard' || mode === 'leaderboard') renderLeaderboard();
+    }
+
+    // ==================== ARCADE ENGINE ====================
+    function startArcadeGame() {
+      if (game.animId) cancelAnimationFrame(game.animId);
+      game.hp = 3;
+      game.cleared = 0;
+      game.combo = 0;
+      game.level = 1;
+      game.running = true;
+      document.getElementById('arcade-overlay').classList.add('hidden');
+      spawnNextPacket();
+      updateHUD();
+      gameLoop();
+    }
+
+    function spawnNextPacket() {
+      const item = PACKETS[Math.floor(Math.random() * PACKETS.length)];
+      game.activePacket = {
+        data: item,
+        y: 14,
+        x: 50
+      };
+      document.getElementById('arcade-indicator').textContent = `ตัวชี้วัด ${item.ind} (หลักสูตรแกนกลาง 2560)`;
+      renderPacketDOM();
+    }
+
+    function renderPacketDOM() {
+      const container = document.getElementById('packet-container');
+      if (!game.activePacket) {
+        container.innerHTML = '';
+        return;
+      }
+      const p = game.activePacket;
+      const isBoss = game.cleared >= 12;
+      container.innerHTML = `
+        <div style="transform: translate(-50%, ${p.y}px); left: 50%;" class="absolute w-11/12 max-w-xl p-3.5 rounded-2xl border-2 ${isBoss ? 'bg-rose-950/95 border-rose-400' : 'bg-slate-900/95 border-indigo-400'} shadow-xl text-center">
+          <div class="flex items-center justify-between text-xs font-bold mb-1">
+            <span class="px-2 py-0.5 rounded bg-indigo-500/30 text-indigo-200">${isBoss ? '🔥 BOSS PACKET' : '📦 DATA PACKET'}</span>
+            <span class="text-emerald-300">ตัวชี้วัด ${p.data.ind}</span>
+          </div>
+          <div class="text-sm md:text-base font-extrabold text-white">${p.data.title}</div>
+        </div>
+      `;
+    }
+
+    function gameLoop() {
+      if (!game.running) return;
+      const speedMult = parseFloat(document.getElementById('arcade-speed').value || '1');
+      if (game.activePacket) {
+        game.activePacket.y += (0.55 + game.level * 0.12) * speedMult;
+        renderPacketDOM();
+
+        // Check if packet crossed defense line (y > 215)
+        if (game.activePacket.y > 215) {
+          sfxError();
+          game.hp -= 1;
+          game.combo = 0;
+          setToast(`💥 แพ็กเกจหลุดแนวป้องกัน! เฉลยคือ [${game.activePacket.data.code}] (${game.activePacket.data.hint})`, false);
+          updateHUD();
+
+          if (game.hp <= 0) {
+            endArcadeGame(false);
+            return;
+          } else {
+            spawnNextPacket();
+          }
+        }
+      }
+      game.animId = requestAnimationFrame(gameLoop);
+    }
+
+    function drawLaserEffect(isHit) {
+      const svg = document.getElementById('laser-svg');
+      if (!game.activePacket) return;
+      const targetY = game.activePacket.y + 40;
+      const color = isHit ? '#34d399' : '#f43f5e';
+      svg.innerHTML = `
+        <line x1="450" y1="265" x2="450" y2="${targetY}" stroke="${color}" stroke-width="6" stroke-linecap="round"/>
+        <circle cx="450" cy="${targetY}" r="22" fill="${color}" opacity="0.45"/>
+      `;
+      setTimeout(() => { svg.innerHTML = ''; }, 180);
+    }
+
+    function fireLaser(chosenCode) {
+      if (!game.running || !game.activePacket) return;
+      const pkt = game.activePacket.data;
+
+      if (chosenCode === pkt.code) {
+        sfxLaserOk();
+        drawLaserEffect(true);
+        game.combo += 1;
+        game.cleared += 1;
+        const pts = 150 + game.combo * 25;
+        game.score += pts;
+        game.level = Math.min(5, 1 + Math.floor(game.cleared / 3));
+
+        setToast(`🎯 ยิงเข้าเป้า! [${pkt.code}] +${pts} คะแนน — ${pkt.hint}`, true);
+        updateHUD();
+
+        if (game.cleared >= game.targetClear) {
+          sfxLevelUp();
+          endArcadeGame(true);
+        } else {
+          spawnNextPacket();
+        }
+      } else {
+        sfxError();
+        drawLaserEffect(false);
+        game.combo = 0;
+        game.hp -= 1;
+        setToast(`❌ ยิงผิดท่อ! คุณเลือก ${chosenCode} แต่แพ็กเกจนี้คือ [${pkt.code}] (${pkt.hint})`, false);
+        updateHUD();
+
+        if (game.hp <= 0) {
+          endArcadeGame(false);
+        } else {
+          spawnNextPacket();
+        }
+      }
+    }
+
+    function setToast(msg, ok) {
+      const el = document.getElementById('arcade-toast');
+      const txt = document.getElementById('arcade-toast-text');
+      txt.textContent = msg;
+      el.className = `p-3 rounded-xl border text-xs md:text-sm font-bold flex items-center justify-between ${
+        ok ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300' : 'bg-rose-500/15 border-rose-500/40 text-rose-300'
+      }`;
+    }
+
+    function endArcadeGame(victory) {
+      game.running = false;
+      if (game.animId) cancelAnimationFrame(game.animId);
+      document.getElementById('packet-container').innerHTML = '';
+      const ov = document.getElementById('arcade-overlay');
+      ov.classList.remove('hidden');
+      document.getElementById('overlay-title').textContent = victory
+        ? `🏆 ภารกิจสำเร็จ! คุณปกป้องระบบสารสนเทศองค์กรได้ครบทั้ง 15 แพ็กเกจ!`
+        : `⚠️ ระบบองค์กรหยุดทำงานชั่วคราว! (คะแนนที่ได้: ${game.score.toLocaleString()})`;
+      document.getElementById('overlay-desc').textContent = victory
+        ? `คุณได้รับคะแนนรวม ${game.score.toLocaleString()} คะแนน และบรรลุตัวชี้วัด ว 4.1 และ ว 4.2 ระดับชั้นปีที่ 2 สามารถไปต่อที่โหมดสร้างตึกพีระมิดหรือบันทึกคะแนนลง SQLite ได้เลย!`
+        : `ทบทวนจุดเด่นของ TPS, OAS, MIS, DSS, EIS และ ES แล้วกดปุ่มด้านล่างเพื่อแก้มืออีกครั้ง!`;
+    }
+
+    // Keyboard Shortcuts 1 - 6
+    window.addEventListener('keydown', e => {
+      if (!game.running) return;
+      const map = { '1': 'TPS', '2': 'OAS', '3': 'MIS', '4': 'DSS', '5': 'EIS', '6': 'ES' };
+      if (map[e.key]) fireLaser(map[e.key]);
+    });
+
+    // ==================== MODE 2: TOWER BUILDER ====================
+    function selectTowerFloor(idx) {
+      game.selectedFloor = idx;
+      const fl = TOWER_FLOORS[idx];
+      document.getElementById('tower-selected-title').textContent = `📍 กำลังเลือก: ${fl.name}`;
+      document.getElementById('tower-selected-desc').textContent = fl.desc;
+    }
+
+    function installTowerSystem(code) {
+      const fb = document.getElementById('tower-feedback');
+      if (game.selectedFloor === null) {
+        fb.className = 'p-3.5 rounded-xl border border-amber-500/40 bg-amber-500/15 text-amber-300 text-xs font-bold';
+        fb.textContent = '👆 กรุณาคลิกเลือกชั้นของตึกพีระมิดในภาพด้านซ้ายก่อนติดตั้งระบบ!';
+        fb.classList.remove('hidden');
+        return;
+      }
+
+      const fl = TOWER_FLOORS[game.selectedFloor];
+      if (fl.answer === code) {
+        sfxLaserOk();
+        game.installedFloors[fl.idx] = code;
+        game.score += 200;
+        document.getElementById('svg-floor-' + fl.idx).setAttribute('fill', fl.color);
+        document.getElementById('txt-floor-' + fl.idx).textContent = `✓ ติดตั้งระบบ ${code} สำเร็จ!`;
+        document.getElementById('txt-floor-' + fl.idx).setAttribute('fill', '#ffffff');
+
+        fb.className = 'p-3.5 rounded-xl border border-emerald-500/40 bg-emerald-500/15 text-emerald-300 text-xs font-bold';
+        fb.textContent = `✅ ติดตั้งระบบ ${code} ลงใน "${fl.name}" สำเร็จ! (+200 คะแนน)`;
+        fb.classList.remove('hidden');
+
+        if (Object.keys(game.installedFloors).length === 4) {
+          sfxLevelUp();
+          game.score += 500;
+          fb.textContent = `🎉 ยอดเยี่ยม! คุณสร้างตึกพีระมิดระบบสารสนเทศครบทั้ง 4 ชั้น รับโบนัสพิเศษ +500 คะแนน!`;
+        }
+        updateHUD();
+      } else {
+        sfxError();
+        fb.className = 'p-3.5 rounded-xl border border-rose-500/40 bg-rose-500/15 text-rose-300 text-xs font-bold';
+        fb.textContent = `❌ ระบบ ${code} ยังไม่ตรงกับความต้องการของ ${fl.name}`;
+        fb.classList.remove('hidden');
+      }
+    }
+
+    function resetTowerMode() {
+      game.selectedFloor = null;
+      game.installedFloors = {};
+      const defaultLabels = [
+        'ชั้นที่ 4: ระดับกลยุทธ์ [?]',
+        'ชั้นที่ 3: ระดับวิเคราะห์ทางเลือก [?]',
+        'ชั้นที่ 2: ระดับบริหารควบคุม [?]',
+        'ชั้นที่ 1: ระดับปฏิบัติการรายวัน [?]'
+      ];
+      for (let i = 0; i < 4; i++) {
+        document.getElementById('svg-floor-' + i).setAttribute('fill', '#1e293b');
+        document.getElementById('txt-floor-' + i).textContent = defaultLabels[i];
+      }
+      document.getElementById('tower-feedback').classList.add('hidden');
+    }
+
+    // ==================== MODE 3: SVGPEDIA ====================
+    const SVG_CARDS_DATA = [
+      { code: 'TPS', title: 'ระบบประมวลผลรายการประจำวัน', level: 'Operational Level', desc: 'บันทึกรายการธุรกรรมประจำวันแบบ Real-time เช่น POS, ATM, เช็กอินสายการบิน (ว 4.1)', color: '#059669' },
+      { code: 'OAS', title: 'ระบบสำนักงานอัตโนมัติ', level: 'Knowledge / Office Level', desc: 'จัดการเอกสารอิเล็กทรอนิกส์ (e-Office) ลงนามดิจิทัล และตารางนัดหมาย (ว 4.1)', color: '#0284c7' },
+      { code: 'MIS', title: 'ระบบสารสนเทศเพื่อการจัดการ', level: 'Management Level', desc: 'สรุปรายงานประจำงวด (Scheduled Report) และรายงานสิ่งผิดปกติ (Exception Report) (ว 4.2)', color: '#4f46e5' },
+      { code: 'DSS', title: 'ระบบสนับสนุนการตัดสินใจ', level: 'Analytical Level', desc: 'จำลองสถานการณ์ What-if Analysis และวิเคราะห์ทางเลือกในปัญหากึ่งมีโครงสร้าง (ว 4.2)', color: '#d97706' },
+      { code: 'EIS', title: 'ระบบสารสนเทศผู้บริหารระดับสูง', level: 'Strategic Level', desc: 'แสดง Executive Dashboard ติดตาม KPI ระยะยาว 3–5 ปี และเจาะลึกข้อมูล Drill-down (ว 4.1)', color: '#e11d48' },
+      { code: 'ES',  title: 'ระบบผู้เชี่ยวชาญและ AI', level: 'Specialized Knowledge', desc: 'ใช้ Knowledge Base และ Inference Engine วินิจฉัยปัญหาเฉพาะทางแทนผู้เชี่ยวชาญ (ว 4.2)', color: '#7e22ce' }
+    ];
+
+    function renderSvgPedia() {
+      document.getElementById('svgpedia-grid').innerHTML = SVG_CARDS_DATA.map(c => `
+        <div class="p-4 rounded-xl bg-[var(--background)] border border-[var(--border)] space-y-2">
+          <svg viewBox="0 0 300 90" class="w-full h-auto rounded-lg">
+            <rect width="300" height="90" rx="10" fill="${c.color}"/>
+            <circle cx="50" cy="45" r="26" fill="#0f172a" opacity="0.4"/>
+            <text x="50" y="51" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold">${c.code}</text>
+            <text x="100" y="42" fill="#fff" font-size="14" font-weight="bold">${c.title}</text>
+            <text x="100" y="62" fill="#e2e8f0" font-size="11">${c.level}</text>
+          </svg>
+          <p class="text-xs text-[var(--muted-foreground)] leading-relaxed pt-1">${c.desc}</p>
+        </div>
+      `).join('');
+    }
+
+    // ==================== MODE 4: SQLITE LEADERBOARD ====================
+    function renderLeaderboard() {
+      const tbody = document.getElementById('lb-rows');
+      tbody.innerHTML = game.leaderboard.map((r, i) => `
+        <tr class="border-b border-[var(--border)]">
+          <td class="py-2.5 px-3 font-extrabold">#${i + 1}</td>
+          <td class="py-2.5 px-3">${r.id}</td>
+          <td class="py-2.5 px-3 font-semibold">${r.name}</td>
+          <td class="py-2.5 px-3 font-extrabold text-amber-400">${r.score.toLocaleString()}</td>
+          <td class="py-2.5 px-3 text-indigo-400 font-bold">Lv.${r.level}</td>
+          <td class="py-2.5 px-3">${r.rank}</td>
+        </tr>
+      `).join('');
+    }
+
+    function savePlayerScore() {
+      const id = document.getElementById('player-id').value.trim() || '67010299';
+      const name = document.getElementById('player-name').value.trim() || 'นักศึกษาชั้นปีที่ 2';
+      let rank = 'Junior IS Defender';
+      if (game.score >= 2500) rank = '🏆 Chief Information Officer (CIO)';
+      else if (game.score >= 1200) rank = '⭐ Senior IS Architect';
+      else if (game.score >= 500) rank = '💼 Systems Analyst';
+
+      game.leaderboard.push({ id, name, score: game.score, level: game.level, rank });
+      game.leaderboard.sort((a, b) => b.score - a.score);
+      sfxLevelUp();
+
+      const banner = document.getElementById('save-banner');
+      banner.textContent = `✅ บันทึกคะแนนของ ${id} (${name}) จำนวน ${game.score.toLocaleString()} คะแนน ลงฐานข้อมูล SQLite เรียบร้อยแล้ว!`;
+      banner.classList.remove('hidden');
+      renderLeaderboard();
+    }
+
+    renderSvgPedia();
+    renderLeaderboard();
+    updateHUD();
+  </script>
+</body>
+</html>
